@@ -10,12 +10,20 @@ const staffRoutes = require('./Route/staffRoute');
 
 const app = express();
 
-app.use(express.json());   
+// Paystack webhook must receive the original raw request body
+app.use(
+    '/api/payments/webhook',
+    express.raw({ type: 'application/json' }),
+    paymentWebhookRoutes
+);
+
+// Parse JSON for all other routes
+app.use(express.json());
+
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 app.use('/api/participants', participantRoutes);
-app.use('/api/payments', paymentRoutes)
-app.use('/api/payments/webhook', paymentWebhookRoutes);
+app.use('/api/payments', paymentRoutes);
 app.use('/api/tickets', ticketRoutes);
 app.use('/api/staff', staffRoutes);
 

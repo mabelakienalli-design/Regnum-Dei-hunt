@@ -4,9 +4,10 @@
   "description": "An interactive web application for seekers to fill out a participant form to register",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon app.js"
-  },
+  "test": "echo \"Error: no test specified\" && exit 1",
+  "dev": "nodemon app.js",
+  "start": "node app.js"
+},
   "keywords": [],
   "author": "",
   "license": "ISC",

@@ -7,29 +7,72 @@ const { sendTicketEmail } = require('../Services/emailService');
 const handlePaystackWebhook = async (req, res) => {
     try {
 
-        //get paystack signature
-        const signature = req.headers['x-paystack-signature'];
+       // Get Paystack signature
+const signature = req.headers['x-paystack-signature'];
 
-        //create our own signature
-        const hash = crypto
-            .createHmac('sha512', process.env.PAYSTACK_SECRET_KEY)
-            .update(JSON.stringify(req.body))
-            .digest('hex');
+// Ensure the original request body is available
+if (!Buffer.isBuffer(req.body) || !signature) {
+    return res.status(400).json({
+        message: 'Invalid webhook request'
+    });
+}
 
-        //compare signatures
-        if (signature !== hash) {
-            return res.status(401).json({
-                message: 'Invalid webhook signature'
-            });
-        }
+// Generate signature using the original raw request body
+const hash = crypto
+    .createHmac('sha512', process.env.PAYSTACK_SECRET_KEY)
+    .update(req.body)
+    .digest('hex');
 
-        //get event information from paystack
-        const event = req.body;
+// Compare signatures safely
+const receivedSignature = Buffer.from(signature, 'hex');
+const calculatedSignature = Buffer.from(hash, 'hex');
+
+if (
+    receivedSignature.length !== calculatedSignature.length ||
+    !crypto.timingSafeEqual(receivedSignature, calculatedSignature)
+) {
+    return res.status(401).json({
+        message: 'Invalid webhook signature'
+    });
+}
+
+// Convert the verified request body into JSON
+const event = JSON.parse(req.body.toString('utf8'));
 
         console.log('Paystack webhook received:', event);
 
         //only process successful payments
         if (event.event === 'charge.success' && event.data.status === 'success') {
+
+            // Verify expected payment amount
+const expectedAmount =
+    Number(process.env.REGISTRATION_FEE) * 100;
+
+// Paystack sends amounts in kobo
+if (
+    !Number.isFinite(expectedAmount) ||
+    expectedAmount <= 0 ||
+    event.data.amount !== expectedAmount ||
+    event.data.currency !== 'NGN'
+) {
+    console.error('Payment amount or currency mismatch');
+
+    return res.status(400).json({
+        message: 'Payment verification failed'
+    });
+}
+
+// Verify registration metadata
+// const registrationNumber =
+//     event.data.metadata?.registrationNumber;
+
+if (!registrationNumber) {
+    console.error('Missing registration number in payment metadata');
+
+    return res.status(400).json({
+        message: 'Missing registration information'
+    });
+}
 
             //get registration number and payment information
             const registrationNumber = event.data.metadata.registrationNumber;
@@ -88,8 +131,18 @@ const ticketToken = crypto.randomBytes(32).toString('hex');
     ticket_used: false
 })
                 .eq('registration_number', registrationNumber)
+                .is('ticket_token', null)
                 .select('registration_number, payment_status, payment_reference, paid_at')
-                .single();
+                .maybeSingle();
+
+                if (!data && !error) {
+    console.log(
+        'Ticket already generated or payment already processed:',
+        registrationNumber
+    );
+
+    return res.sendStatus(200);
+}
 
             if (error) {
                 console.error('Supabase payment update error:', error);
