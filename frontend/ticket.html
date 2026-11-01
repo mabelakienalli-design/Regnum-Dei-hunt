@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>REGNUM DEI HUNT — Seeker Ticket</title>
+
+    <link rel="stylesheet" href="ticket.css">
+
+</head>
+
+<body>
+
+    <main class="ticket-page">
+
+        <section class="ticket-card">
+
+            <!-- HEADER -->
+            <header class="ticket-header">
+
+               <div class="brand-mark">
+    <img src="regnum-dei-logo.png" alt="REGNUM DEI">
+</div>
+
+                <p class="brand-name">
+                    REGNUM DEI
+                </p>
+
+                <p class="brand-subtitle">
+                    THE KINGDOM OF GOD
+                </p>
+
+            </header>
+
+
+            <!-- DIVIDER -->
+            <div class="gold-line"></div>
+
+
+            <!-- MAIN TITLE -->
+            <section class="ticket-title">
+
+                <p class="eyebrow">
+                    REGNUM DEI HUNT
+                </p>
+
+                <h1>
+                    YOU'RE IN.
+                </h1>
+
+                <p>
+                    Your place in the Hunt has been secured.
+                </p>
+
+            </section>
+
+
+            <!-- SEEKER INFORMATION -->
+            <section class="seeker-information">
+
+                <div class="information-item">
+
+                    <span>
+                        SEEKER ID
+                    </span>
+
+                    <strong id="ticketRegistrationNumber">
+                        RDH-26-0000
+                    </strong>
+
+                </div>
+
+
+                <div class="information-item">
+
+                    <span>
+                        SEEKER NAME
+                    </span>
+
+                    <strong id="ticketFullName">
+                        Participant Name
+                    </strong>
+
+                </div>
+
+            </section>
+
+
+            <!-- QR CODE -->
+            <section class="qr-section">
+
+                <div
+                    id="qrCode"
+                    class="qr-code"
+                ></div>
+
+                <p>
+                    Present this QR code at the Hunt.
+                </p>
+
+            </section>
+
+
+            <!-- FOOTER -->
+           <footer class="ticket-footer">
+
+    <p>
+        SAVE YOUR TICKET
+    </p>
+
+    <small>
+        Keep this ticket on your phone and present
+        your QR code at the Hunt.
+    </small>
+
+    <button
+        type="button"
+        id="saveTicketButton"
+        class="save-ticket-button"
+    >
+        SAVE TICKET
+    </button>
+
+    <small class="screenshot-note">
+        You may screenshot this ticket for easy access.
+    </small>
+
+</footer>
+
+        </section>
+
+    </main>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+
+    <script src="ticket.js"></script>
+
+</body>
+
+</html>

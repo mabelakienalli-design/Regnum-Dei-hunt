@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>REGNUM DEI — Seeker Registration</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <main class="registration-container">
+
+        <!-- REGNUM DEI HEADER -->
+        <section class="registration-header">
+
+           <img
+    src="assets/regnum-dei-logo.png"
+    alt="REGNUM DEI Logo"
+    class="logo"
+>
+
+<p class="brand-name">
+    REGNUM DEI
+</p>
+
+<p class="eyebrow">
+    THE KINGDOM OF GOD
+</p>
+
+<h1>
+    Seeker Registration
+</h1>
+
+            <p class="intro">
+                Enter the Kingdom. Begin the journey.
+            </p>
+
+        </section>
+
+
+        <!-- REGISTRATION FORM -->
+        <form id="registrationForm">
+
+            <!-- PARTICIPANT INFORMATION -->
+            <section class="form-section">
+
+                <div class="section-heading">
+
+                    <span>01</span>
+
+                    <div>
+                        <h2>Seeker Information</h2>
+                        <p>Tell us about yourself.</p>
+                    </div>
+
+                </div>
+
+
+                <!-- FULL NAME -->
+                <div class="form-group">
+
+                    <label for="fullName">
+                        Full Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="fullName"
+                        name="fullName"
+                        placeholder="Enter your full name"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- DATE OF BIRTH -->
+                <div class="form-group">
+
+                    <label for="dateOfBirth">
+                        Date of Birth
+                    </label>
+
+                    <input
+                        type="date"
+                        id="dateOfBirth"
+                        name="dateOfBirth"
+                        required
+                    >
+
+                </div>
+
+
+                <!-- GENDER -->
+                <div class="form-group">
+
+                    <label for="gender">
+                        Gender
+                    </label>
+
+                    <select
+                        id="gender"
+                        name="gender"
+                        required
+                    >
+
+                        <option value="">
+                            Select your gender
+                        </option>
+
+                        <option value="Male">
+                            Male
+                        </option>
+
+                        <option value="Female">
+                            Female
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </section>
+
+        <!-- CONTACT INFORMATION -->
+<section class="form-section">
+
+    <div class="section-heading">
+
+        <span>02</span>
+
+        <div>
+            <h2>Contact Information</h2>
+            <p>How can we reach you?</p>
+        </div>
+
+    </div>
+
+
+    <!-- PHONE -->
+    <div class="form-group">
+
+    <label for="phone">
+        Phone Number
+    </label>
+
+    <div class="phone-input-wrapper">
+        <span class="country-code">+234</span>
+
+        <input
+            type="tel"
+            id="phone"
+            name="phone"
+            placeholder="8012345678"
+            maxlength="10"
+            required
+        >
+    </div>
+
+</div>
+
+
+    <!-- EMAIL -->
+    <div class="form-group">
+
+        <label for="email">
+            Email Address
+        </label>
+
+    <input
+    type="email"
+    id="email"
+    name="email"
+    placeholder="example@gmail.com"
+    required
+>
+
+    </div>
+
+
+    <!-- HOME CHURCH / COMMUNITY -->
+    <div class="form-group">
+
+        <label for="homeChurchCommunity">
+            Home Church / Community
+        </label>
+
+        <input
+            type="text"
+            id="homeChurchCommunity"
+            name="homeChurchCommunity"
+            placeholder="Enter your church or community"
+            required
+        >
+
+    </div>
+
+
+    <!-- T-SHIRT SIZE -->
+    <div class="form-group">
+
+        <label for="tshirtSize">
+            T-Shirt Size
+        </label>
+
+        <select
+            id="tshirtSize"
+            name="tshirtSize"
+            required
+        >
+
+            <option value="">
+                Select your T-shirt size
+            </option>
+
+            <option value="XS">XS</option>
+            <option value="S">S</option>
+            <option value="M">M</option>
+            <option value="L">L</option>
+            <option value="XL">XL</option>
+            <option value="XXL">XXL</option>
+
+        </select>
+
+    </div>
+
+</section>
+
+<!-- EMERGENCY CONTACT -->
+<div class="form-group">
+
+    <label for="emergencyContactPhone">
+        Emergency Contact Phone
+    </label>
+
+    <div class="phone-input-wrapper">
+        <span class="country-code">+234</span>
+
+        <input
+            type="tel"
+            id="emergencyContactPhone"
+            name="emergencyContactPhone"
+            placeholder="8012345678"
+            maxlength="10"
+            required
+        >
+    </div>
+
+</div>
+
+
+    <!-- EMERGENCY CONTACT NAME -->
+    <div class="form-group">
+
+        <label for="emergencyContactName">
+            Emergency Contact Name
+        </label>
+
+        <input
+            type="text"
+            id="emergencyContactName"
+            name="emergencyContactName"
+            placeholder="Enter emergency contact name"
+            required
+        >
+
+    </div>
+
+
+    <!-- RELATIONSHIP -->
+    <div class="form-group">
+
+    <label for="relationship">
+        Relationship
+    </label>
+
+    <select
+        id="relationship"
+        name="relationship"
+        required
+    >
+
+        <option value="">
+            Select relationship
+        </option>
+
+        <option value="Parent">
+            Parent
+        </option>
+
+        <option value="Guardian">
+            Guardian
+        </option>
+
+        <option value="Sibling">
+            Sibling
+        </option>
+
+        <option value="Spouse">
+            Spouse
+        </option>
+
+        <option value="Relative">
+            Relative
+        </option>
+
+        <option value="Friend">
+            Friend
+        </option>
+
+        <option value="Other">
+            Other
+        </option>
+
+    </select>
+
+</div>
+
+
+<!-- MEDICAL INFORMATION -->
+<section class="form-section">
+
+    <div class="section-heading">
+
+        <span>04</span>
+
+        <div>
+            <h2>Medical Information</h2>
+            <p>This information helps us keep you safe during the hunt.</p>
+        </div>
+
+    </div>
+
+
+ <!-- MEDICAL CONDITIONS -->
+<div class="form-group">
+
+    <label for="hasMedicalConditions">
+        Do you have any medical conditions?
+    </label>
+
+    <select
+        id="hasMedicalConditions"
+        name="hasMedicalConditions"
+        required
+    >
+
+        <option value="">
+            Select an option
+        </option>
+
+        <option value="false">
+            No
+        </option>
+
+        <option value="true">
+            Yes
+        </option>
+
+    </select>
+
+</div>
+
+
+<!-- SPECIFIC MEDICAL CONDITION -->
+<div
+    class="form-group"
+    id="medicalConditionGroup"
+    style="display: none;"
+>
+
+    <label for="medicalConditions">
+        Please specify your medical condition
+    </label>
+
+    <input
+        type="text"
+        id="medicalConditions"
+        name="medicalConditions"
+        placeholder="Enter your medical condition"
+    >
+
+    <p class="field-note">
+        This information is collected to help us provide appropriate support
+    and respond to emergencies during the REGNUM DEI HUNT.
+    </p>
+
+</div>
+
+
+    <!-- MEDICATION -->
+    <div class="form-group">
+
+        <label for="isOnMedication">
+            Are you currently taking any medication?
+        </label>
+
+        <select
+            id="isOnMedication"
+            name="isOnMedication"
+            required
+        >
+
+            <option value="">
+                Select an option
+            </option>
+
+            <option value="false">
+                No
+            </option>
+
+            <option value="true">
+                Yes
+            </option>
+
+        </select>
+
+    </div>
+
+
+    <!-- BLOOD GROUP -->
+    <div class="form-group">
+
+        <label for="bloodGroup">
+            Blood Group
+        </label>
+
+        <select
+            id="bloodGroup"
+            name="bloodGroup"
+            required
+        >
+
+            <option value="">
+                Select your blood group
+            </option>
+
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+
+        </select>
+
+    </div>
+
+
+    <!-- ALLERGIES -->
+    <div class="form-group">
+
+        <label for="allergies">
+            Allergies
+        </label>
+
+        <input
+            type="text"
+            id="allergies"
+            name="allergies"
+            placeholder="Enter any known allergies, or type None"
+            required
+        >
+
+    </div>
+
+</section>
+
+<!-- CONSENT & AGREEMENTS -->
+<section class="form-section">
+
+    <div class="section-heading">
+
+        <span>05</span>
+
+        <div>
+            <h2>Consent & Agreements</h2>
+            <p>Please read and agree to each statement.</p>
+        </div>
+
+    </div>
+
+
+    <!-- VOLUNTARY PARTICIPATION -->
+    <div class="consent-group">
+
+        <label class="consent-item">
+
+            <input
+                type="checkbox"
+                id="voluntaryParticipation"
+                name="voluntaryParticipation"
+                value="true"
+                required
+            >
+
+            <span>
+                I confirm that I am participating in REGNUM DEI voluntarily.
+            </span>
+
+        </label>
+
+    </div>
+
+
+    <!-- MEDICAL DISCLOSURE -->
+    <div class="consent-group">
+
+        <label class="consent-item">
+
+            <input
+                type="checkbox"
+                id="medicalDisclosure"
+                name="medicalDisclosure"
+                value="true"
+                required
+            >
+
+            <span>
+                I confirm that the medical information I have provided is
+                accurate and complete.
+            </span>
+
+        </label>
+
+    </div>
+
+
+    <!-- LIABILITY ACKNOWLEDGEMENT -->
+    <div class="consent-group">
+
+        <label class="consent-item">
+
+            <input
+                type="checkbox"
+                id="liabilityAcknowledgement"
+                name="liabilityAcknowledgement"
+                value="true"
+                required
+            >
+
+            <span>
+                I acknowledge the risks associated with participating in
+                REGNUM DEI and agree to follow all safety instructions.
+            </span>
+
+        </label>
+
+    </div>
+
+
+    <!-- PHOTOGRAPHY CONSENT -->
+    <div class="consent-group">
+
+        <label class="consent-item">
+
+            <input
+                type="checkbox"
+                id="photographyConsent"
+                name="photographyConsent"
+                value="true"
+                required
+            >
+
+            <span>
+                I consent to photographs and videos taken during REGNUM DEI
+                being used for event documentation and promotional purposes.
+            </span>
+
+        </label>
+
+    </div>
+
+
+    <!-- SAFETY AGREEMENT -->
+    <div class="consent-group">
+
+        <label class="consent-item">
+
+            <input
+                type="checkbox"
+                id="safetyAgreement"
+                name="safetyAgreement"
+                value="true"
+                required
+            >
+
+            <span>
+                I agree to follow the safety rules and instructions given by
+                REGNUM DEI officials and volunteers.
+            </span>
+
+        </label>
+
+    </div>
+
+</section>
+
+<!-- TERMS & CONDITIONS & SIGNATURE -->
+<section class="form-section">
+
+    <div class="section-heading">
+
+        <span>06</span>
+
+        <div>
+            <h2>Terms & Conditions</h2>
+            <p>Review and confirm your agreement.</p>
+        </div>
+
+    </div>
+
+
+    <!-- TERMS & CONDITIONS AGREEMENT -->
+    <div class="consent-group">
+
+        <label class="consent-item">
+
+            <input
+                type="checkbox"
+                id="termsAgreement"
+                name="termsAgreement"
+                value="true"
+                required
+            >
+
+            <span>
+                I have read and agree to the
+                <a
+                    href="terms.html"
+                    target="_blank"
+                    class="terms-link"
+                >
+                    REGNUM DEI Terms & Conditions
+                </a>.
+            </span>
+
+        </label>
+
+    </div>
+
+
+    <!-- SIGNATURE -->
+    <div class="form-group">
+
+        <label for="signature">
+            Type Your Full Name as Signature
+        </label>
+
+        <input
+            type="text"
+            id="signature"
+            name="signature"
+            placeholder="This confirms your signature"
+            required
+        >
+
+        <p class="field-note">
+            By signing, you confirm that the information provided is accurate
+            and that you agree to the REGNUM DEI participation terms.
+        </p>
+
+    </div>
+
+</section>
+
+            <!-- SUBMIT -->
+            <button
+    type="submit"
+    class="submit-button"
+    id="submitButton"
+    disabled
+>
+    Continue Registration
+</button>
+
+        </form>
+
+ <!-- REGISTRATION SUCCESS -->
+<section
+    id="successSection"
+    class="success-section"
+    style="display: none;"
+>
+
+
+    <h2>
+        YOU'RE ENLISTED!
+    </h2>
+
+    <p class="success-message">
+        REGNUM DEI HUNT REGISTRATION WAS SUCCESSFUL
+    </p>
+
+    <div class="registration-number-box">
+
+        <p>
+            SEEKER ID
+        </p>
+
+        <strong id="registrationNumber">
+            RDH-26-0000
+        </strong>
+
+    </div>
+
+    <p class="success-note">
+        Keep your Seeker ID safe. You will need it
+        throughout your REGNUM DEI HUNT journey.
+    </p>
+
+    <button
+    type="button"
+    id="continueToPaymentButton"
+    class="submit-button"
+>
+    Continue to Payment
+</button>
+
+</section>
+
+<!-- PAYMENT SECTION -->
+<section
+    id="paymentSection"
+    class="payment-section"
+    style="display: none;"
+>
+
+    <h2>
+        Secure Your Place
+    </h2>
+
+    <p class="payment-intro">
+        Your registration is complete. Complete your registration
+        payment to secure your place in the REGNUM DEI Hunt.
+    </p>
+
+<div class="payment-summary">
+
+    <p>
+        <span>Seeker ID</span>
+        <strong id="paymentSeekerId">
+            RDH-26-0000
+        </strong>
+    </p>
+
+    <p>
+        <span>Registration Fee</span>
+        <strong>
+            ₦3,000
+        </strong>
+    </p>
+
+    <p>
+        <span>Processing Fee</span>
+        <strong>
+            ₦150
+        </strong>
+    </p>
+
+    <p class="payment-total">
+        <span>Total</span>
+        <strong id="registrationFee">
+            ₦3,150
+        </strong>
+    </p>
+
+</div>
+
+    <button
+        type="button"
+        id="payNowButton"
+        class="submit-button"
+    >
+        Pay Registration Fee
+    </button>
+
+</section>
+
+    </main>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>
