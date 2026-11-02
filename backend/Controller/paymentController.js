@@ -191,10 +191,71 @@ const checkPaymentStatus = async (req, res) => {
 
 
 // =========================
+// VERIFY PAYMENT WITH PAYSTACK
+// =========================
+
+const completePayment = require('../Services/completePayment');
+
+const verifyPayment = async (req, res) => {
+    try {
+        const { regNumber } = req.params;
+        const { reference } = req.query;
+
+        if (!reference) {
+            return res.status(400).json({
+                message: 'Payment reference is required'
+            });
+        }
+
+        // Verify transaction directly with Paystack
+        const response = await axios.get(
+            `https://api.paystack.co/transaction/verify/${encodeURIComponent(reference)}`,
+            {
+                headers: {
+                    Authorization:
+                        `Bearer ${process.env.PAYSTACK_SECRET_KEY}`
+                }
+            }
+        );
+
+        const transaction = response.data.data;
+
+        // Ensure the transaction belongs to this registration
+        if (
+            transaction.metadata?.registrationNumber !== regNumber
+        ) {
+            return res.status(400).json({
+                message: 'Payment registration does not match'
+            });
+        }
+
+        const result = await completePayment(transaction);
+
+        return res.status(200).json({
+            message: 'Payment verified successfully',
+            paymentStatus: 'paid',
+            ticketReady: result.ticketReady
+        });
+
+    } catch (error) {
+        console.error(
+            'Payment verification error:',
+            error.response?.data || error.message
+        );
+
+        return res.status(500).json({
+            message: 'Could not verify payment'
+        });
+    }
+};
+
+
+// =========================
 // EXPORT
 // =========================
 
 module.exports = {
     initializePayment,
-    checkPaymentStatus
+    checkPaymentStatus,
+    verifyPayment
 };

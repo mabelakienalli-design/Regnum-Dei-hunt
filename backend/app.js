@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const path = require('path');
 const config = require('./Config/config');
 
@@ -9,6 +10,9 @@ const ticketRoutes = require('./Route/ticketRoute');
 const staffRoutes = require('./Route/staffRoute');
 
 const app = express();
+app.use(cors({
+    origin: 'http://localhost:3000'
+}));
 
 // Paystack webhook must receive the original raw request body
 app.use(

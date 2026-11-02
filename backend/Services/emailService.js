@@ -1,5 +1,11 @@
 const nodemailer = require('nodemailer');
 const path = require('path');
+const fs = require('fs');
+const { Resend } = require('resend');
+
+const resend = new Resend(process.env.RESEND_API_KEY);
+
+const emailProvider = process.env.EMAIL_PROVIDER || 'gmail';
 
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -32,7 +38,7 @@ const sendTicketEmail = async (
             'regnum-dei-logo.png'
         );
 
-        await transporter.sendMail({
+       const mailOptions = {
             from: process.env.EMAIL_USER,
             to,
 
@@ -742,9 +748,37 @@ const sendTicketEmail = async (
                 }
 
             ]
-        });
+        };
 
-        console.log('Ticket email sent successfully to:', to);
+if (emailProvider === 'resend') {
+    const { data, error } = await resend.emails.send({
+        from: 'REGNUM DEI <onboarding@resend.dev>',
+        to: [to],
+        subject: mailOptions.subject,
+        html: mailOptions.html,
+        attachments: [
+            {
+                filename: 'regnum-dei-ticket.png',
+                content: qrCodeBase64,
+                content_id: 'regnumdeiticket'
+            },
+            {
+                filename: 'regnum-dei-logo.png',
+                content: fs.readFileSync(logoPath).toString('base64'),
+                content_id: 'regnumdeilogo'
+            }
+        ]
+    });
+
+    if (error) {
+        throw new Error(error.message);
+    }
+
+    console.log('Ticket email sent successfully through Resend:', data.id);
+} else {
+    await transporter.sendMail(mailOptions);
+    console.log('Ticket email sent successfully through Gmail:', to);
+}
 
     } catch (error) {
         console.error('Ticket email sending error:', error);

@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
 
     const paymentMessage =
         document.getElementById('paymentMessage');
@@ -9,68 +9,55 @@ document.addEventListener('DOMContentLoaded', function () {
     const registrationNumber =
         urlParams.get('regNumber');
 
-    if (!registrationNumber) {
+    const reference =
+        urlParams.get('reference') ||
+        urlParams.get('trxref');
 
+    if (!registrationNumber || !reference) {
         paymentMessage.textContent =
-            'We could not identify your Seeker ID.';
+            'We could not identify your payment. Please contact the organisers.';
 
         return;
     }
 
-    let attempts = 0;
+    paymentMessage.textContent =
+        'Confirming your payment... Please wait while we prepare your ticket.';
 
-    const maxAttempts = 30;
+    try {
 
-    const checkPayment = setInterval(async function () {
+        const response = await fetch(
+            `/api/payments/verify/${encodeURIComponent(registrationNumber)}?reference=${encodeURIComponent(reference)}`
+        );
 
-        attempts++;
+        const data = await response.json();
 
-        try {
+        console.log('Payment verification:', data);
 
-            const response = await fetch(
-                `/api/payments/status/${registrationNumber}`
-            );
+        if (
+            response.ok &&
+            data.paymentStatus === 'paid' &&
+            data.ticketReady === true
+        ) {
+            paymentMessage.textContent =
+                'Payment confirmed! Redirecting to your ticket...';
 
-            const data = await response.json();
+            window.location.href =
+                `/ticket.html?regNumber=${encodeURIComponent(registrationNumber)}`;
 
-            console.log(
-                'Payment status:',
-                data
-            );
-
-            if (
-                data.paymentStatus === 'paid' &&
-                data.ticketReady === true
-            ) {
-
-                clearInterval(checkPayment);
-
-                paymentMessage.textContent =
-                    'Payment confirmed! Preparing your ticket...';
-
-                window.location.href =
-                    `/ticket.html?regNumber=${registrationNumber}`;
-
-                return;
-            }
-
-            if (attempts >= maxAttempts) {
-
-                clearInterval(checkPayment);
-
-                paymentMessage.textContent =
-                    'Your payment was received, but your ticket is still being prepared. Please wait a moment and refresh this page.';
-            }
-
-        } catch (error) {
-
-            console.error(
-                'Payment status check error:',
-                error
-            );
-
+            return;
         }
 
-    }, 2000);
+        paymentMessage.textContent =
+            data.message ||
+            'We could not confirm your payment. Please contact the organisers.';
+
+    } catch (error) {
+
+        console.error('Payment verification error:', error);
+
+        paymentMessage.textContent =
+            'We could not verify your payment right now. Please refresh this page shortly.';
+
+    }
 
 });
