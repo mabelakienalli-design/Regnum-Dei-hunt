@@ -72,8 +72,8 @@ const initializePayment = async (req, res) => {
 
                 amount: amount,
 
-                callback_url:
-                    `http://localhost:5000/payment-success.html?regNumber=${participant.registration_number}`,
+               callback_url:
+    `${process.env.FRONTEND_URL}/payment-success.html?regNumber=${participant.registration_number}`,
 
                 metadata: {
                     registrationNumber:
