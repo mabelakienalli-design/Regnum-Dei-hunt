@@ -393,44 +393,44 @@ confirmEmailButton.addEventListener('click', async function () {
     // AGE VALIDATION
     // =========================
 
-    dateOfBirth.addEventListener('change', function () {
+//     dateOfBirth.addEventListener('change', function () {
 
-        if (!dateOfBirth.value) {
-            return;
-        }
+//         if (!dateOfBirth.value) {
+//             return;
+//         }
 
-        const birthDate = new Date(dateOfBirth.value);
+//         const birthDate = new Date(dateOfBirth.value);
 
-        const today = new Date();
+//         const today = new Date();
 
-        let age =
-            today.getFullYear() - birthDate.getFullYear();
+//         let age =
+//             today.getFullYear() - birthDate.getFullYear();
 
-        const monthDifference =
-            today.getMonth() - birthDate.getMonth();
+//         const monthDifference =
+//             today.getMonth() - birthDate.getMonth();
 
-        if (
-            monthDifference < 0 ||
-            (
-                monthDifference === 0 &&
-                today.getDate() < birthDate.getDate()
-            )
-        ) {
-            age--;
-        }
+//         if (
+//             monthDifference < 0 ||
+//             (
+//                 monthDifference === 0 &&
+//                 today.getDate() < birthDate.getDate()
+//             )
+//         ) {
+//             age--;
+//         }
 
-        if (age < 15 || age > 22) {
+//         if (age < 15 || age > 22) {
 
-           alert(
-    'Sorry, you do not meet the eligibility requirements for REGNUM DEI HUNT.'
-);
+//            alert(
+//     'Sorry, you do not meet the eligibility requirements for REGNUM DEI HUNT.'
+// );
 
-            dateOfBirth.value = '';
+//             dateOfBirth.value = '';
 
-            return;
-        }
+//             return;
+//         }
 
-    });
+//     });
 
 
     // =========================
@@ -589,6 +589,35 @@ if (!emailPattern.test(emailValue)) {
             return;
         }
 
+        // AGE ELIGIBILITY VALIDATION
+const dateOfBirthValue = dateOfBirth.value;
+
+if (!dateOfBirthValue) {
+    alert('Please enter your date of birth.');
+    dateOfBirth.focus();
+    return;
+}
+
+const birthDate = new Date(dateOfBirthValue);
+const today = new Date();
+
+let age = today.getFullYear() - birthDate.getFullYear();
+
+const monthDifference = today.getMonth() - birthDate.getMonth();
+
+if (
+    monthDifference < 0 ||
+    (monthDifference === 0 && today.getDate() < birthDate.getDate())
+) {
+    age--;
+}
+
+if (age < 15 || age > 22) {
+    alert('Sorry, you do not meet the eligibility requirements for REGNUM DEI HUNT.');
+    dateOfBirth.value = '';
+    dateOfBirth.focus();
+    return;
+}
 
         // =========================
 // SUBMIT REGISTRATION
