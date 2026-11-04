@@ -758,6 +758,60 @@
         grid-template-columns:1fr;
       }
     }
+    @media(max-width:650px){
+    body {
+        font-size: 15px;
+        overflow-x: hidden;
+    }
+
+    .layout {
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    main {
+        width: 100%;
+        min-width: 0;
+        padding: 20px 12px;
+        overflow-x: hidden;
+    }
+
+    .content-grid,
+    .panel,
+    .stats,
+    .records-toolbar {
+        min-width: 0;
+        max-width: 100%;
+    }
+
+    .panel {
+        overflow-x: hidden;
+    }
+
+    .description,
+    label,
+    th,
+    td {
+        font-size: 12px;
+    }
+
+    .nav-item {
+        font-size: 12px;
+    }
+
+    .primary-button,
+    .secondary-button,
+    .copy-button {
+        font-size: 12px;
+    }
+
+    .content-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+    gap: 14px;
+}
+}
   </style>
 </head>
 
