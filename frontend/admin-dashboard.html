@@ -1,0 +1,2907 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>REGNUM DEI | Admin Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --gold:#c99a38;
+      --gold-soft:#f7efdd;
+      --dark:#171717;
+      --ink:#28251f;
+      --muted:#77736b;
+      --line:#e9e4d9;
+      --paper:#f8f7f3;
+      --white:#fff;
+      --green:#287a50;
+      --red:#b63b35;
+    }
+
+    * {
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+
+    html {
+      scroll-behavior:smooth;
+    }
+
+    body {
+      font-family:'Montserrat',sans-serif;
+      background:var(--paper);
+      color:var(--ink);
+      font-size:13px;
+    }
+
+    button,input,select {
+      font:inherit;
+    }
+
+    button {
+      cursor:pointer;
+    }
+
+    .layout {
+      display:flex;
+      min-height:100vh;
+    }
+
+    aside {
+      width:250px;
+      background:var(--dark);
+      color:#fff;
+      padding:27px 19px;
+      display:flex;
+      flex-direction:column;
+      flex-shrink:0;
+    }
+
+    .brand-wrap {
+      margin-bottom:42px;
+    }
+
+    .brand-logo {
+      display:block;
+      width:55px;
+      height:55px;
+      object-fit:contain;
+      margin-bottom:12px;
+    }
+
+    .brand {
+      font-size:19px;
+      font-weight:800;
+      letter-spacing:2px;
+      color:var(--gold);
+    }
+
+    .brand-subtitle {
+      font-size:9px;
+      letter-spacing:2.5px;
+      color:#aaa;
+      margin-top:5px;
+    }
+
+    .tagline {
+      font-size:9px;
+      letter-spacing:.5px;
+      color:#d8c18c;
+      margin-top:13px;
+    }
+
+    .nav-label {
+      font-size:9px;
+      color:#888;
+      letter-spacing:2px;
+      margin:0 0 13px 9px;
+    }
+
+    .nav-item {
+      display:block;
+      width:100%;
+      text-align:left;
+      padding:12px 11px;
+      border:0;
+      border-radius:6px;
+      margin-bottom:6px;
+      color:#c9c9c9;
+      background:transparent;
+      font-size:11px;
+    }
+
+    .nav-item:hover,
+    .nav-item.active {
+      background:#30291d;
+      color:var(--gold);
+    }
+
+    .sidebar-bottom {
+      margin-top:auto;
+      border-top:1px solid #353535;
+      padding-top:18px;
+    }
+
+    .sidebar-bottom p {
+      font-size:10px;
+      color:#aaa;
+      margin-bottom:12px;
+    }
+
+    .logout-button {
+      width:100%;
+      padding:10px;
+      border:1px solid #555;
+      border-radius:5px;
+      color:#fff;
+      background:transparent;
+    }
+
+    main {
+      flex:1;
+      min-width:0;
+      padding:32px;
+    }
+
+    section[id] {
+      scroll-margin-top:25px;
+    }
+
+    .topbar {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:15px;
+      margin-bottom:29px;
+    }
+
+    .eyebrow {
+      font-size:9px;
+      font-weight:800;
+      letter-spacing:2px;
+      color:var(--gold);
+      margin-bottom:7px;
+    }
+
+    h1 {
+      font-size:25px;
+      font-weight:700;
+      letter-spacing:-.7px;
+    }
+
+    .profile {
+      text-align:right;
+      font-size:11px;
+    }
+
+    .profile strong {
+      display:block;
+      margin-bottom:4px;
+    }
+
+    .profile span {
+      color:var(--muted);
+      font-size:10px;
+    }
+
+    .section-heading {
+      font-size:17px;
+      font-weight:700;
+      margin-bottom:15px;
+    }
+
+    .stats {
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:13px;
+      margin-bottom:25px;
+    }
+
+    .stat-card,
+    .panel {
+      background:var(--white);
+      border:1px solid var(--line);
+      border-radius:9px;
+      padding:19px;
+    }
+
+    .stat-card p {
+      font-size:10px;
+      color:var(--muted);
+      margin-bottom:11px;
+    }
+
+    .stat-card h2 {
+      font-size:22px;
+      font-weight:700;
+    }
+
+    .stat-card small {
+      display:block;
+      color:#999;
+      font-size:9px;
+      margin-top:7px;
+    }
+
+    .content-grid {
+      display:grid;
+      grid-template-columns:minmax(0,1.5fr) minmax(260px,.75fr);
+      gap:16px;
+      align-items:start;
+    }
+
+    .panel {
+      margin-bottom:16px;
+      min-width:0;
+    }
+
+    .panel-heading {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-bottom:15px;
+    }
+
+    .panel-heading h3 {
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .panel-heading span {
+      font-size:9px;
+      color:var(--muted);
+    }
+
+    .description {
+      font-size:10px;
+      color:var(--muted);
+      line-height:1.8;
+      margin-bottom:17px;
+    }
+
+    label {
+      display:block;
+      font-size:10px;
+      font-weight:700;
+      margin-bottom:7px;
+    }
+
+    select,input {
+      width:100%;
+      padding:11px;
+      border:1px solid var(--line);
+      border-radius:5px;
+      background:#fff;
+      outline-color:var(--gold);
+      font-size:11px;
+    }
+
+    select {
+      margin-bottom:13px;
+    }
+
+    .primary-button {
+      width:100%;
+      padding:12px;
+      background:var(--dark);
+      color:#fff;
+      border:0;
+      border-radius:5px;
+      font-size:10px;
+      font-weight:700;
+    }
+
+    .primary-button:hover {
+      background:#3a3020;
+    }
+
+    .primary-button:disabled {
+      opacity:.55;
+      cursor:not-allowed;
+    }
+
+    .invitation-result {
+      display:none;
+      margin-top:15px;
+      padding:13px;
+      background:#faf7ef;
+      border:1px solid var(--gold-soft);
+      border-radius:6px;
+    }
+
+    .invitation-result p {
+      font-size:10px;
+      line-height:1.6;
+      margin-bottom:8px;
+    }
+
+    .invitation-link {
+      overflow-wrap:anywhere;
+      font-size:10px;
+      color:#72551d;
+      margin-bottom:10px;
+    }
+
+    .copy-button,
+    .secondary-button {
+      padding:9px 11px;
+      border:1px solid var(--gold);
+      background:#fff;
+      border-radius:5px;
+      font-size:10px;
+    }
+
+    .status-message {
+      font-size:10px;
+      margin-top:10px;
+      line-height:1.5;
+    }
+
+    .status-message.error {
+      color:var(--red);
+    }
+
+    .status-message.success {
+      color:var(--green);
+    }
+
+    .records-toolbar {
+      display:flex;
+      gap:9px;
+      align-items:center;
+      margin-bottom:13px;
+    }
+
+    .records-toolbar input {
+      flex:1;
+      min-width:120px;
+    }
+
+    .records-toolbar button {
+      white-space:nowrap;
+    }
+
+    .table-wrap {
+      overflow-x:auto;
+      border:1px solid var(--line);
+      border-radius:6px;
+    }
+
+    table {
+      width:100%;
+      border-collapse:collapse;
+      min-width:590px;
+    }
+
+    th,td {
+      padding:11px 10px;
+      text-align:left;
+      border-bottom:1px solid #f0ede7;
+      font-size:10px;
+      white-space:nowrap;
+    }
+
+    th {
+      background:#faf9f6;
+      color:#777;
+      font-size:9px;
+      text-transform:uppercase;
+      letter-spacing:.6px;
+    }
+
+    tbody tr:last-child td {
+      border-bottom:0;
+    }
+
+    .status {
+      display:inline-block;
+      padding:5px 7px;
+      border-radius:20px;
+      font-size:9px;
+      font-weight:700;
+      text-transform:capitalize;
+    }
+
+    .status.paid {
+      background:#e8f4ec;
+      color:#287a50;
+    }
+
+    .status.pending {
+      background:#fff3dc;
+      color:#956817;
+    }
+
+    .status.other {
+      background:#eee;
+      color:#666;
+    }
+
+    .view-button {
+      border:0;
+      background:transparent;
+      color:#916a20;
+      font-size:10px;
+      font-weight:700;
+    }
+
+    .pagination {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-top:13px;
+    }
+
+    .pagination span {
+      font-size:9px;
+      color:var(--muted);
+    }
+
+    .pagination-actions {
+      display:flex;
+      gap:6px;
+    }
+
+    .pagination button {
+      padding:7px 10px;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:4px;
+      font-size:9px;
+    }
+
+    .pagination button:disabled {
+      opacity:.4;
+      cursor:not-allowed;
+    }
+
+    .empty-state {
+      padding:24px;
+      text-align:center;
+      color:var(--muted);
+      font-size:10px;
+    }
+
+    .security-note {
+      padding:13px;
+      background:#f5f2e9;
+      border-radius:6px;
+      font-size:9px;
+      line-height:1.7;
+      color:#665b46;
+    }
+
+    .modal-backdrop {
+      display:none;
+      position:fixed;
+      inset:0;
+      background:#0009;
+      z-index:20;
+      padding:22px;
+      overflow:auto;
+    }
+
+    .modal {
+      max-width:760px;
+      margin:35px auto;
+      background:#fff;
+      border-radius:9px;
+      padding:22px;
+      box-shadow:0 15px 50px #0003;
+    }
+
+    .modal-header {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      margin-bottom:17px;
+    }
+
+    .modal-header h2 {
+      font-size:17px;
+    }
+
+    .close-button {
+      border:0;
+      background:#f1eee8;
+      border-radius:50%;
+      width:30px;
+      height:30px;
+      font-size:17px;
+    }
+
+    .detail-grid {
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:12px;
+    }
+
+    .detail-item {
+      padding:11px;
+      background:#faf9f6;
+      border-radius:5px;
+      min-width:0;
+    }
+
+    .detail-item small {
+      display:block;
+      color:var(--muted);
+      font-size:8px;
+      text-transform:uppercase;
+      letter-spacing:.6px;
+      margin-bottom:6px;
+    }
+
+    .detail-item strong {
+      font-size:10px;
+      overflow-wrap:anywhere;
+      white-space:pre-wrap;
+    }
+
+    .modal-message {
+      font-size:10px;
+      color:var(--muted);
+      margin-top:13px;
+    }
+
+    .footer-motto {
+      text-align:center;
+      color:#8a713d;
+      font-size:9px;
+      letter-spacing:.4px;
+      margin:24px 0 4px;
+    }
+
+    
+/* CHECK-IN MOBILE IMPROVEMENTS */
+
+.checkin-lookup-toolbar {
+  display: flex;
+  gap: 9px;
+  align-items: stretch;
+  margin-bottom: 13px;
+}
+
+.checkin-lookup-toolbar input {
+  flex: 1;
+  min-width: 0;
+  min-height: 46px;
+  font-size: 13px;
+}
+
+.checkin-lookup-toolbar button {
+  width: auto;
+  min-width: 90px;
+  min-height: 46px;
+}
+
+.checkin-result-card {
+  padding: 20px;
+  border: 1px solid #c5a45d;
+  border-radius: 8px;
+  background: #fff;
+  color: #222;
+  overflow-wrap: anywhere;
+}
+
+.checkin-result-card h3 {
+  font-size: 16px;
+  margin-bottom: 16px;
+}
+
+.checkin-result-card p {
+  font-size: 12px;
+  line-height: 1.7;
+  margin-bottom: 9px;
+}
+
+.checkin-result-card .checkin-action-button {
+  width: 100%;
+  min-height: 48px;
+  margin-top: 12px;
+  padding: 13px;
+  border: 0;
+  border-radius: 6px;
+  background: var(--dark);
+  color: white;
+  font-weight: 700;
+  font-size: 11px;
+}
+
+.checkin-result-card .checkin-action-button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+.checkin-result-card .reverse-action-button {
+  background: #fff;
+  color: var(--red);
+  border: 1px solid var(--red);
+}
+
+@media(max-width:650px) {
+  .checkin-lookup-toolbar {
+    flex-direction: column;
+  }
+
+  .checkin-lookup-toolbar button {
+    width: 100%;
+    min-height: 46px;
+  }
+
+  .checkin-result-card {
+    padding: 16px;
+  }
+
+  .checkin-result-card p {
+    font-size: 12px;
+  }
+
+  #startScannerButton,
+  #stopScannerButton,
+  #verifyTicketButton {
+    min-height: 46px;
+  }
+}
+
+
+    @media(max-width:1000px) {
+      .content-grid {
+        grid-template-columns:1fr;
+      }
+
+      .stats {
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+    }
+
+    @media(max-width:650px) {
+      .layout {
+        display:block;
+      }
+
+      aside {
+        width:100%;
+        padding:17px;
+      }
+
+      .brand-wrap {
+        margin-bottom:17px;
+      }
+
+      .brand-logo {
+        width:42px;
+        height:42px;
+        margin-bottom:7px;
+      }
+
+      .nav-label {
+        display:none;
+      }
+
+      .nav-item {
+        display:inline-block;
+        width:auto;
+        padding:9px 10px;
+        margin:0 3px 5px 0;
+      }
+
+      .sidebar-bottom {
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        gap:12px;
+        margin-top:10px;
+        padding-top:12px;
+      }
+
+      .sidebar-bottom p {
+        margin:0;
+      }
+
+      .logout-button {
+        width:auto;
+        padding:8px 12px;
+      }
+
+      main {
+        padding:21px 14px;
+      }
+
+      .topbar {
+        align-items:flex-start;
+      }
+
+      h1 {
+        font-size:21px;
+      }
+
+      .profile {
+        max-width:45%;
+        overflow-wrap:anywhere;
+      }
+
+      .stats {
+        gap:9px;
+      }
+
+      .stat-card {
+        padding:14px;
+      }
+
+      .stat-card h2 {
+        font-size:19px;
+      }
+
+      .panel {
+        padding:14px;
+      }
+
+      .records-toolbar {
+        flex-wrap:wrap;
+      }
+
+      .records-toolbar input {
+        flex-basis:100%;
+      }
+
+      .detail-grid {
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="layout">
+    <aside>
+      <div class="brand-wrap">
+        <img
+          class="brand-logo"
+          src="/assets/regnum-dei-logo.png"
+          alt="REGNUM DEI crest"
+          onerror="this.style.display='none'"
+        >
+
+        <div class="brand">REGNUM DEI</div>
+        <div class="brand-subtitle">THE KINGDOM OF GOD</div>
+        <div class="tagline">Faith. Purpose. Adventure.</div>
+      </div>
+
+      <div class="nav-label">ADMINISTRATION</div>
+
+      <button class="nav-item active" type="button" data-target="overview">
+        Overview
+      </button>
+
+      <button class="nav-item" type="button" data-target="participantRecords">
+        Seekers
+      </button>
+
+      <button class="nav-item" type="button" data-target="staffManagement">
+  Staff Management
+</button>
+
+      <button class="nav-item" type="button" data-target="checkinPanel">
+        Check-in
+      </button>
+
+      <div class="sidebar-bottom">
+        <p>Administrator access</p>
+        <button class="logout-button" id="logoutButton">Log out</button>
+      </div>
+    </aside>
+
+    <main>
+      <div class="topbar">
+        <div>
+          <div class="eyebrow">REGNUM DEI HUNT</div>
+          <h1>Admin Dashboard</h1>
+        </div>
+
+        <div class="profile">
+          <strong id="adminName">Loading...</strong>
+          <span id="adminRole">Verifying access...</span>
+        </div>
+      </div>
+
+      <section id="overview">
+        <h2 class="section-heading">Overview</h2>
+
+        <div class="stats">
+          <div class="stat-card">
+            <p>Total Seekers</p>
+            <h2 id="totalSeekers">—</h2>
+            <small>Registered participants</small>
+          </div>
+
+          <div class="stat-card">
+            <p>Successful Payments</p>
+            <h2 id="paidSeekers">—</h2>
+            <small>Payment status: paid</small>
+          </div>
+
+          <div class="stat-card">
+            <p>Pending Payments</p>
+            <h2 id="pendingSeekers">—</h2>
+            <small>Awaiting payment</small>
+          </div>
+
+          <div class="stat-card">
+            <p>Checked In</p>
+            <h2 id="checkedInSeekers">—</h2>
+            <small>Ticket check-in records</small>
+          </div>
+        </div>
+      </section>
+
+      <div class="content-grid">
+        <div>
+          <section class="panel" id="staffInvitations">
+            <div class="panel-heading">
+              <h3>Staff Invitations</h3>
+              <span>Admin only</span>
+            </div>
+
+            <p class="description">
+              Generate an invitation link for a new staff member.
+              The selected role is assigned automatically when the person
+              registers. Each link remains valid for 30 minutes and can be
+              used by multiple people during that period.
+            </p>
+
+            <label for="staffRole">Choose staff role</label>
+
+            <select id="staffRole">
+              <option value="volunteer">Volunteer</option>
+              <option value="admin">Admin</option>
+            </select>
+
+            <button class="primary-button" id="generateButton">
+              Generate Invitation Link
+            </button>
+
+            <div class="status-message" id="invitationMessage"></div>
+
+            <div class="invitation-result" id="invitationResult">
+              <p><strong>Invitation link generated</strong></p>
+              <div class="invitation-link" id="invitationLink"></div>
+              <p id="invitationExpiry"></p>
+              <button class="copy-button" id="copyButton">
+                Copy invitation link
+              </button>
+            </div>
+          </section>
+
+          <section class="panel" id="participantRecords">
+            <div class="panel-heading">
+              <h3>Participant Records</h3>
+              <span id="recordsCount">Loading records...</span>
+            </div>
+
+            <div class="records-toolbar">
+              <input
+                id="participantSearch"
+                type="search"
+                placeholder="Search by seeker name or registration number"
+                aria-label="Search participants"
+              >
+
+              <button class="secondary-button" id="searchButton">
+                Search
+              </button>
+
+              <button class="secondary-button" id="exportButton">
+                Export CSV
+              </button>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Seeker ID</th>
+                    <th>Full name</th>
+                    <th>Age</th>
+                    <th>T-shirt</th>
+                    <th>Payment</th>
+                    <th>Record</th>
+                  </tr>
+                </thead>
+
+                <tbody id="participantsBody">
+                  <tr>
+                    <td colspan="6" class="empty-state">
+                      Loading participant records...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="pagination">
+              <span id="pageInfo">Page 1</span>
+
+              <div class="pagination-actions">
+                <button id="previousPage" disabled>Previous</button>
+                <button id="nextPage" disabled>Next</button>
+              </div>
+            </div>
+
+            <div class="status-message" id="recordsMessage" aria-live="polite"></div>
+          </section>
+        </div>
+
+        <div>
+          
+<section class="panel" id="checkinPanel">
+
+  <div class="panel-heading">
+    <h3>Seeker Check-in</h3>
+    <span>Admin & Volunteer</span>
+  </div>
+
+  <p class="description">
+    Scan a seeker's QR ticket to verify payment and record their
+    arrival. Only paid, unused tickets can be accepted.
+  </p>
+
+  <div class="checkin-actions">
+
+    <button
+      type="button"
+      class="primary-button"
+      id="startScannerButton"
+    >
+      Start QR Scanner
+    </button>
+
+    <button
+      type="button"
+      class="secondary-button"
+      id="stopScannerButton"
+      disabled
+    >
+      Stop Scanner
+    </button>
+
+  </div>
+
+  <div id="qrReader" style="
+    width:100%;
+    max-width:420px;
+    margin:20px auto;
+  "></div>
+
+  <div class="divider"></div>
+
+  <h4>Manual Ticket Verification</h4>
+
+  <p class="description">
+    If the camera is unavailable, enter the ticket token from the
+    QR code.
+  </p>
+
+  <div class="records-toolbar">
+    <input
+      type="text"
+      id="ticketTokenInput"
+      placeholder="Enter ticket token"
+      autocomplete="off"
+    >
+
+    <button
+      type="button"
+      class="primary-button"
+      id="verifyTicketButton"
+    >
+      Verify & Check In
+    </button>
+  </div>
+
+  <div class="divider"></div>
+
+  <h4>Look Up a Seeker</h4>
+
+  
+<div class="checkin-lookup-toolbar">
+  <input
+    type="text"
+    id="checkinRegistrationInput"
+    placeholder="Enter Seeker ID (e.g. RDH-26-7771)"
+    autocomplete="off"
+  >
+
+  <button
+    type="button"
+    class="primary-button"
+    id="lookupSeekerButton"
+  >
+    Search Seeker
+  </button>
+</div>
+
+
+  <div id="checkinResult" style="margin-top:20px;"></div>
+
+  <div class="divider"></div>
+
+<div class="panel-heading" style="margin-top:25px;">
+  <h3>Checked-In Seekers</h3>
+
+  <button
+    type="button"
+    class="secondary-button"
+    id="refreshCheckedInButton"
+  >
+    Refresh List
+  </button>
+</div>
+
+<p class="description">
+  These are the seekers whose tickets have successfully been checked in.
+</p>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Seeker ID</th>
+        <th>Full Name</th>
+        <th>T-shirt</th>
+        <th>Payment</th>
+        <th>Check-in Time</th>
+      </tr>
+    </thead>
+
+    <tbody id="checkedInBody">
+      <tr>
+        <td colspan="5" class="empty-state">
+          Loading checked-in seekers...
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div
+  class="status-message"
+  id="checkedInMessage"
+  aria-live="polite"
+></div>
+
+  <div
+    class="status-message"
+    id="checkinMessage"
+    aria-live="polite"
+  ></div>
+
+  <div class="security-note">
+    Volunteers can check seekers in but cannot reverse a check-in.
+    Only an Admin can reverse a recorded check-in.
+  </div>
+
+</section>
+
+         
+<section class="panel" id="staffManagement">
+
+  <div class="panel-heading">
+    <h3>Staff Directory</h3>
+    <span id="staffCount">Loading staff...</span>
+  </div>
+
+  <p class="description">
+    Manage REGNUM DEI administrators and volunteers.
+    Changes to roles, departments and account status take effect
+    through the backend.
+  </p>
+
+  <div class="records-toolbar">
+    <input
+      type="search"
+      id="staffSearch"
+      placeholder="Search staff by name"
+      aria-label="Search staff"
+    >
+
+    <button class="secondary-button" id="refreshStaffButton">
+      Refresh
+    </button>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Role</th>
+          <th>Department</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody id="staffDirectoryBody">
+        <tr>
+          <td colspan="5" class="empty-state">
+            Loading staff directory...
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div
+    class="status-message"
+    id="staffMessage"
+    aria-live="polite"
+  ></div>
+
+  <div class="security-note">
+    Only Admins can manage staff accounts. The last active Admin
+    cannot be demoted or deactivated.
+  </div>
+
+  <div class="panel-heading" style="margin-top:30px;">
+    <h3>Invitation History</h3>
+    <span>Admin only</span>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Role</th>
+          <th>Created</th>
+          <th>Expires</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody id="invitationsBody">
+        <tr>
+          <td colspan="5" class="empty-state">
+            Loading invitations...
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div
+    class="status-message"
+    id="invitationsMessage"
+    aria-live="polite"
+  ></div>
+
+</section>
+
+
+          <div class="security-note">
+            <strong>Access control:</strong>
+            This dashboard requires an active Admin staff profile.
+            Participant details are retrieved through protected staff endpoints.
+            Volunteers must never receive private contact, medical, emergency
+            or consent information.
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-motto">
+        Jesus will be seen. Jesus will be glorified.
+      </div>
+    </main>
+  </div>
+
+  <div
+    class="modal-backdrop"
+    id="participantModal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modalTitle"
+  >
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modalTitle">Participant details</h2>
+        <button class="close-button" id="closeModal" aria-label="Close">
+          &times;
+        </button>
+      </div>
+
+      <div class="detail-grid" id="participantDetails"></div>
+      <p class="modal-message" id="modalMessage"></p>
+    </div>
+  </div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://unpkg.com/html5-qrcode"></script>
+
+
+  <script>
+    let supabaseClient;
+    let currentSession;
+
+    let currentPage = 1;
+    const pageSize = 25;
+
+    let totalPages = 1;
+    let currentSearch = '';
+    let generatedLink = '';
+
+    const $ = (id) => document.getElementById(id);
+
+    const adminName = $('adminName');
+    const adminRole = $('adminRole');
+
+    function setMessage(element, message, type = '') {
+      element.textContent = message;
+      element.className = `status-message ${type}`.trim();
+    }
+
+    async function apiFetch(url, options = {}) {
+      const response = await fetch(url, {
+        ...options,
+        headers: {
+          ...(options.headers || {}),
+          Authorization: `Bearer ${currentSession.access_token}`
+        }
+      });
+
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(
+          result.message ||
+          result.error ||
+          `Request failed (${response.status})`
+        );
+      }
+
+      return result;
+    }
+
+    async function initializeDashboard() {
+      try {
+        const configResponse = await fetch('/api/config/supabase');
+
+        if (!configResponse.ok) {
+          throw new Error('Could not load dashboard configuration.');
+        }
+
+        const config = await configResponse.json();
+
+        supabaseClient = window.supabase.createClient(
+          config.supabaseUrl,
+          config.supabaseKey
+        );
+
+        const { data, error } = await supabaseClient.auth.getSession();
+
+        if (error || !data.session) {
+          window.location.href = '/staff-login.html';
+          return;
+        }
+
+        currentSession = data.session;
+
+        const profileData = await apiFetch('/api/staff/me');
+        const staff = profileData.staff || profileData;
+
+        if (staff.role !== 'admin' || staff.active === false) {
+          window.location.href = '/volunteer-dashboard.html';
+          return;
+        }
+
+        adminName.textContent = staff.full_name || 'Administrator';
+
+        adminRole.textContent =
+          `${staff.role.toUpperCase()}` +
+          `${staff.department ? ' · ' + staff.department : ''}`;
+
+      await loadParticipants();
+
+await loadCheckedInParticipants();
+
+await loadStaffDirectory();
+
+await loadStaffInvitations();
+
+      } catch (error) {
+        console.error('Dashboard initialization error:', error);
+
+        adminName.textContent = 'Access unavailable';
+        adminRole.textContent = error.message;
+
+        $('participantsBody').innerHTML = `
+          <tr>
+            <td colspan="6" class="empty-state">
+              Could not load dashboard. ${escapeHtml(error.message)}
+            </td>
+          </tr>
+        `;
+      }
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? '').replace(/[&<>"']/g, char => ({
+        '&':'&amp;',
+        '<':'&lt;',
+        '>':'&gt;',
+        '"':'&quot;',
+        "'":'&#39;'
+      })[char]);
+    }
+
+    function paymentClass(status) {
+      const normalized = String(status || '').toLowerCase();
+
+      if (
+        normalized === 'paid' ||
+        normalized === 'success' ||
+        normalized === 'successful'
+      ) {
+        return 'paid';
+      }
+
+      if (normalized === 'pending') {
+        return 'pending';
+      }
+
+      return 'other';
+    }
+
+    async function loadParticipants() {
+      $('participantsBody').innerHTML = `
+        <tr>
+          <td colspan="6" class="empty-state">
+            Loading participant records...
+          </td>
+        </tr>
+      `;
+
+      setMessage($('recordsMessage'), '');
+
+      try {
+        const params = new URLSearchParams({
+          page: currentPage,
+          limit: pageSize
+        });
+
+        if (currentSearch) {
+          params.set('search', currentSearch);
+        }
+
+        const result = await apiFetch(
+          `/api/staff/records?${params.toString()}`
+        );
+
+        const participants =
+          result.participants || result.data || [];
+
+        totalPages = Math.max(
+          1,
+          Number(result.totalPages) || 1
+        );
+
+        const total = Number(
+          result.total ?? participants.length
+        );
+
+        $('recordsCount').textContent =
+          `${total.toLocaleString()} record${total === 1 ? '' : 's'}`;
+
+        $('totalSeekers').textContent = total.toLocaleString();
+
+        if (result.stats) {
+  $('paidSeekers').textContent =
+    Number(result.stats.paid ?? 0).toLocaleString();
+
+  $('pendingSeekers').textContent =
+    Number(result.stats.pending ?? 0).toLocaleString();
+
+  $('checkedInSeekers').textContent =
+    Number(result.stats.checkedIn ?? 0).toLocaleString();
+}
+
+        $('pageInfo').textContent =
+          `Page ${Number(result.page) || currentPage} of ${totalPages}`;
+
+        $('previousPage').disabled = currentPage <= 1;
+        $('nextPage').disabled = currentPage >= totalPages;
+
+        if (!participants.length) {
+          $('participantsBody').innerHTML = `
+            <tr>
+              <td colspan="6" class="empty-state">
+                No participant records found.
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        $('participantsBody').innerHTML = participants.map(person => `
+          <tr>
+            <td>${escapeHtml(person.registration_number)}</td>
+            <td>${escapeHtml(person.full_name)}</td>
+            <td>${escapeHtml(person.age ?? '—')}</td>
+            <td>${escapeHtml(person.tshirt_size ?? '—')}</td>
+            <td>
+              <span class="status ${paymentClass(person.payment_status)}">
+                ${escapeHtml(person.payment_status || 'Unknown')}
+              </span>
+            </td>
+            <td>
+              <button
+                class="view-button"
+                data-registration="${escapeHtml(person.registration_number)}"
+              >
+                View record
+              </button>
+            </td>
+          </tr>
+        `).join('');
+
+        $('participantsBody')
+          .querySelectorAll('[data-registration]')
+          .forEach(button => {
+            button.addEventListener('click', () => {
+              viewParticipant(button.dataset.registration);
+            });
+          });
+
+
+      } catch (error) {
+        console.error('Participant records error:', error);
+
+        $('participantsBody').innerHTML = `
+          <tr>
+            <td colspan="6" class="empty-state">
+              ${escapeHtml(error.message)}
+            </td>
+          </tr>
+        `;
+
+        $('recordsCount').textContent = 'Records unavailable';
+
+        setMessage(
+          $('recordsMessage'),
+          error.message,
+          'error'
+        );
+      }
+    }
+
+    async function viewParticipant(registrationNumber) {
+      $('participantModal').style.display = 'block';
+
+      $('modalTitle').textContent =
+        registrationNumber || 'Participant details';
+
+      $('participantDetails').innerHTML = `
+        <div class="empty-state">
+          Loading full participant record...
+        </div>
+      `;
+
+      $('modalMessage').textContent = '';
+
+      try {
+        const result = await apiFetch(
+          `/api/staff/records/${encodeURIComponent(registrationNumber)}`
+        );
+
+        const person =
+          result.participant || result.data || result;
+
+        const labels = {
+          registration_number:'Seeker ID',
+          full_name:'Full name',
+          date_of_birth:'Date of birth',
+          age:'Age',
+          gender:'Gender',
+          phone:'Phone',
+          email:'Email',
+          home_church_community:'Church / community',
+          tshirt_size:'T-shirt size',
+          emergency_contact_name:'Emergency contact',
+          emergency_contact_phone:'Emergency phone',
+          relationship:'Relationship',
+          payment_status:'Payment status',
+          has_medical_conditions:'Has medical conditions',
+          medical_conditions:'Medical conditions',
+          is_on_medication:'Currently on medication',
+          medication_details:'Medication details',
+          blood_group:'Blood group',
+          allergies:'Allergies',
+          voluntary_participation:'Voluntary participation consent',
+          medical_disclosure:'Medical disclosure consent',
+          liability_acknowledgement:'Liability acknowledgement',
+          photography_consent:'Photography consent',
+          safety_agreement:'Safety agreement',
+          terms_agreement:'Terms agreement',
+          signature:'Signature',
+          ticket_used:'Ticket checked in',
+          ticket_used_at:'Check-in time',
+          created_at:'Registration date'
+        };
+
+        const orderedKeys = Object.keys(labels).filter(key =>
+          person[key] !== undefined &&
+          person[key] !== null &&
+          person[key] !== ''
+        );
+
+        $('participantDetails').innerHTML = orderedKeys.map(key => `
+          <div class="detail-item">
+            <small>${labels[key]}</small>
+            <strong>${escapeHtml(formatDetail(person[key]))}</strong>
+          </div>
+        `).join('') || `
+          <div class="empty-state">
+            No detail fields were returned by the server.
+          </div>
+        `;
+
+      } catch (error) {
+        $('participantDetails').innerHTML = `
+          <div class="empty-state">
+            ${escapeHtml(error.message)}
+          </div>
+        `;
+      }
+    }
+
+    function formatDetail(value) {
+      if (typeof value === 'boolean') {
+        return value ? 'Yes' : 'No';
+      }
+
+      if (typeof value === 'object') {
+        return JSON.stringify(value);
+      }
+
+      return value;
+    }
+
+    function csvCell(value) {
+      const text = String(value ?? '');
+      return `"${text.replace(/"/g, '""')}"`;
+    }
+
+    async function exportParticipants() {
+      const button = $('exportButton');
+
+      button.disabled = true;
+      button.textContent = 'Preparing...';
+
+      setMessage(
+        $('recordsMessage'),
+        'Collecting participant records for CSV export...'
+      );
+
+      try {
+        const first = await apiFetch(
+          '/api/staff/records?page=1&limit=100'
+        );
+
+        const all = first.participants || first.data || [];
+        const pages = Number(first.totalPages) || 1;
+
+        for (let page = 2; page <= pages; page++) {
+          const result = await apiFetch(
+            `/api/staff/records?page=${page}&limit=100`
+          );
+
+          all.push(...(result.participants || result.data || []));
+        }
+
+        const fullRecords = [];
+
+        for (let i = 0; i < all.length; i += 5) {
+          const batch = all.slice(i, i + 5);
+
+          const details = await Promise.all(
+            batch.map(async person => {
+              const result = await apiFetch(
+                `/api/staff/records/${encodeURIComponent(person.registration_number)}`
+              );
+
+              return result.participant || result.data || result;
+            })
+          );
+
+          fullRecords.push(...details);
+        }
+
+        if (!fullRecords.length) {
+          throw new Error('There are no participant records to export.');
+        }
+
+        const columns = [
+          'registration_number',
+          'full_name',
+          'date_of_birth',
+          'gender',
+          'phone',
+          'email',
+          'home_church_community',
+          'tshirt_size',
+          'emergency_contact_name',
+          'emergency_contact_phone',
+          'relationship',
+          'payment_status',
+          'has_medical_conditions',
+          'medical_conditions',
+          'is_on_medication',
+          'medication_details',
+          'blood_group',
+          'allergies',
+          'voluntary_participation',
+          'medical_disclosure',
+          'liability_acknowledgement',
+          'photography_consent',
+          'safety_agreement',
+          'terms_agreement',
+          'signature',
+          'ticket_used',
+          'ticket_used_at',
+          'created_at'
+        ];
+
+        const headings = columns.map(key =>
+          key.replace(/_/g, ' ')
+        );
+
+        const rows = fullRecords.map(record =>
+          columns.map(key => csvCell(record[key])).join(',')
+        );
+
+        const csv = [
+          headings.map(csvCell).join(','),
+          ...rows
+        ].join('\r\n');
+
+        const blob = new Blob(
+          ['\uFEFF' + csv],
+          { type:'text/csv;charset=utf-8;' }
+        );
+
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+
+        link.href = url;
+
+        link.download =
+          `REGNUM-DEI-participant-records-${new Date().toISOString().slice(0,10)}.csv`;
+
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+
+        URL.revokeObjectURL(url);
+
+        setMessage(
+          $('recordsMessage'),
+          `${fullRecords.length} participant records exported.`,
+          'success'
+        );
+
+      } catch (error) {
+        console.error('CSV export error:', error);
+
+        setMessage(
+          $('recordsMessage'),
+          `Export failed: ${error.message}`,
+          'error'
+        );
+
+      } finally {
+        button.disabled = false;
+        button.textContent = 'Export CSV';
+      }
+    }
+
+    
+// ======================================
+// STAFF MANAGEMENT
+// ======================================
+
+const staffDepartments = [
+  'Registration & Check-in',
+  'Medical & Welfare',
+  'Logistics',
+  'Game Operations',
+  'Media & Publicity',
+  'Protocol & Hospitality',
+  'Administration',
+  'Technical Support'
+];
+
+let staffDirectory = [];
+let staffInvitations = [];
+
+
+// HTML safety
+function escapeStaffHtml(value) {
+  return String(value ?? '').replace(/[&<>"']/g, char => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  })[char]);
+}
+
+
+// Load staff directory
+async function loadStaffDirectory() {
+  const body = $('staffDirectoryBody');
+
+  body.innerHTML = `
+    <tr>
+      <td colspan="5" class="empty-state">
+        Loading staff directory...
+      </td>
+    </tr>
+  `;
+
+  try {
+    const result = await apiFetch('/api/staff/directory');
+
+    staffDirectory = result.staff || [];
+
+    renderStaffDirectory();
+
+  } catch (error) {
+    console.error('Staff directory error:', error);
+
+    body.innerHTML = `
+      <tr>
+        <td colspan="5" class="empty-state">
+          Could not load staff directory.
+        </td>
+      </tr>
+    `;
+
+    setMessage($('staffMessage'), error.message, 'error');
+  }
+}
+
+
+// Display staff directory
+function renderStaffDirectory() {
+  const body = $('staffDirectoryBody');
+
+  const search = $('staffSearch').value
+    .trim()
+    .toLowerCase();
+
+  const filteredStaff = staffDirectory.filter(person =>
+    (person.full_name || '').toLowerCase().includes(search)
+  );
+
+  $('staffCount').textContent =
+    `${filteredStaff.length} staff member(s)`;
+
+  if (!filteredStaff.length) {
+    body.innerHTML = `
+      <tr>
+        <td colspan="5" class="empty-state">
+          No staff members found.
+        </td>
+      </tr>
+    `;
+
+    return;
+  }
+
+  body.innerHTML = filteredStaff.map(person => {
+    const departmentOptions = [
+      '<option value="">Unassigned</option>',
+      ...staffDepartments.map(department => `
+        <option
+          value="${escapeStaffHtml(department)}"
+          ${person.department === department ? 'selected' : ''}
+        >
+          ${escapeStaffHtml(department)}
+        </option>
+      `)
+    ].join('');
+
+    return `
+      <tr>
+        <td>
+          <strong>${escapeStaffHtml(person.full_name)}</strong>
+        </td>
+
+        <td>
+          <select
+            class="staff-role-select"
+            data-staff-id="${escapeStaffHtml(person.id)}"
+          >
+            <option value="admin"
+              ${person.role === 'admin' ? 'selected' : ''}>
+              Admin
+            </option>
+
+            <option value="volunteer"
+              ${person.role === 'volunteer' ? 'selected' : ''}>
+              Volunteer
+            </option>
+          </select>
+        </td>
+
+        <td>
+          <select
+            class="staff-department-select"
+            data-staff-id="${escapeStaffHtml(person.id)}"
+          >
+            ${departmentOptions}
+          </select>
+        </td>
+
+        <td>
+          <span>
+            ${person.active ? 'Active' : 'Inactive'}
+          </span>
+        </td>
+
+        <td>
+          <button
+            class="secondary-button save-staff-button"
+            data-staff-id="${escapeStaffHtml(person.id)}"
+          >
+            Save
+          </button>
+
+          <button
+            class="secondary-button toggle-staff-button"
+            data-staff-id="${escapeStaffHtml(person.id)}"
+            data-active="${person.active ? 'true' : 'false'}"
+          >
+            ${person.active ? 'Deactivate' : 'Activate'}
+          </button>
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+
+// Save role and department
+async function saveStaffMember(staffId) {
+  const roleSelect = document.querySelector(
+    `.staff-role-select[data-staff-id="${CSS.escape(staffId)}"]`
+  );
+
+  const departmentSelect = document.querySelector(
+    `.staff-department-select[data-staff-id="${CSS.escape(staffId)}"]`
+  );
+
+  if (!roleSelect || !departmentSelect) return;
+
+  try {
+    const result = await apiFetch(
+      `/api/staff/directory/${encodeURIComponent(staffId)}`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          role: roleSelect.value,
+          department: departmentSelect.value
+        })
+      }
+    );
+
+    setMessage(
+      $('staffMessage'),
+      result.message || 'Staff member updated.',
+      'success'
+    );
+
+    await loadStaffDirectory();
+
+  } catch (error) {
+    setMessage($('staffMessage'), error.message, 'error');
+  }
+}
+
+
+// Activate or deactivate staff member
+async function toggleStaffMember(staffId, currentlyActive) {
+  const action = currentlyActive ? 'deactivate' : 'activate';
+
+  if (!confirm(`Are you sure you want to ${action} this staff account?`)) {
+    return;
+  }
+
+  try {
+    const result = await apiFetch(
+      `/api/staff/directory/${encodeURIComponent(staffId)}`,
+      {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          active: !currentlyActive
+        })
+      }
+    );
+
+    setMessage(
+      $('staffMessage'),
+      result.message || 'Staff account status updated.',
+      'success'
+    );
+
+    await loadStaffDirectory();
+
+  } catch (error) {
+    setMessage($('staffMessage'), error.message, 'error');
+  }
+}
+
+
+// Load invitation history
+async function loadStaffInvitations() {
+  const body = $('invitationsBody');
+
+  try {
+    const result = await apiFetch('/api/staff/invitations');
+
+    staffInvitations = result.invitations || [];
+
+    renderStaffInvitations();
+
+  } catch (error) {
+    console.error('Invitation history error:', error);
+
+    body.innerHTML = `
+      <tr>
+        <td colspan="5" class="empty-state">
+          Could not load invitation history.
+        </td>
+      </tr>
+    `;
+
+    setMessage(
+      $('invitationsMessage'),
+      error.message,
+      'error'
+    );
+  }
+}
+
+
+// Display invitation history
+function renderStaffInvitations() {
+  const body = $('invitationsBody');
+
+  if (!staffInvitations.length) {
+    body.innerHTML = `
+      <tr>
+        <td colspan="5" class="empty-state">
+          No invitations have been created yet.
+        </td>
+      </tr>
+    `;
+
+    return;
+  }
+
+  body.innerHTML = staffInvitations.map(invitation => {
+    const expired =
+      new Date(invitation.expires_at).getTime() <= Date.now();
+
+    const revoked = Boolean(invitation.revoked_at);
+
+    const status = revoked
+      ? 'Revoked'
+      : expired
+        ? 'Expired'
+        : 'Active';
+
+    return `
+      <tr>
+        <td>${escapeStaffHtml(invitation.role)}</td>
+
+        <td>
+          ${new Date(invitation.created_at).toLocaleString()}
+        </td>
+
+        <td>
+          ${new Date(invitation.expires_at).toLocaleString()}
+        </td>
+
+        <td>${status}</td>
+
+        <td>
+          ${
+            !revoked && !expired
+              ? `
+                <button
+                  class="secondary-button revoke-invitation-button"
+                  data-invitation-id="${escapeStaffHtml(invitation.id)}"
+                >
+                  Revoke
+                </button>
+              `
+              : '—'
+          }
+        </td>
+      </tr>
+    `;
+  }).join('');
+}
+
+
+// Revoke invitation
+async function revokeStaffInvitation(invitationId) {
+  if (!confirm('Revoke this invitation link?')) return;
+
+  try {
+    const result = await apiFetch(
+      `/api/staff/invitations/${encodeURIComponent(invitationId)}/revoke`,
+      {
+        method: 'PATCH'
+      }
+    );
+
+    setMessage(
+      $('invitationsMessage'),
+      result.message || 'Invitation revoked.',
+      'success'
+    );
+
+    await loadStaffInvitations();
+
+  } catch (error) {
+    setMessage(
+      $('invitationsMessage'),
+      error.message,
+      'error'
+    );
+  }
+}
+
+
+// Staff directory event handling
+$('staffDirectoryBody').addEventListener('click', event => {
+  const saveButton = event.target.closest('.save-staff-button');
+  const toggleButton = event.target.closest('.toggle-staff-button');
+
+  if (saveButton) {
+    saveStaffMember(saveButton.dataset.staffId);
+  }
+
+  if (toggleButton) {
+    toggleStaffMember(
+      toggleButton.dataset.staffId,
+      toggleButton.dataset.active === 'true'
+    );
+  }
+});
+
+
+// Invitation event handling
+$('invitationsBody').addEventListener('click', event => {
+  const button = event.target.closest('.revoke-invitation-button');
+
+  if (button) {
+    revokeStaffInvitation(button.dataset.invitationId);
+  }
+});
+
+
+// Search staff
+$('staffSearch').addEventListener('input', renderStaffDirectory);
+
+
+// Refresh staff
+$('refreshStaffButton').addEventListener('click', async () => {
+  await loadStaffDirectory();
+  await loadStaffInvitations();
+});
+
+
+    // Generate staff invitation
+    $('generateButton').addEventListener('click', async () => {
+      const button = $('generateButton');
+
+      try {
+        button.disabled = true;
+        button.textContent = 'Generating...';
+
+        setMessage($('invitationMessage'), '');
+
+        $('invitationResult').style.display = 'none';
+
+        const role = $('staffRole').value;
+
+        const result = await apiFetch(
+          '/api/staff/invitations',
+          {
+            method:'POST',
+            headers:{
+              'Content-Type':'application/json'
+            },
+            body:JSON.stringify({ role })
+          }
+        );
+
+        generatedLink =
+          result.invitationLink ||
+          result.link ||
+          result.url ||
+          result.invitation?.link ||
+          '';
+
+        if (!generatedLink) {
+          throw new Error(
+            'Invitation was created, but the server response did not include its link.'
+          );
+        }
+
+        $('invitationLink').textContent = generatedLink;
+
+        const expiry =
+          result.expiresAt ||
+          result.invitation?.expires_at;
+
+        $('invitationExpiry').textContent = expiry
+          ? `Expires: ${new Date(expiry).toLocaleString()}`
+          : 'Valid for 30 minutes.';
+
+        $('invitationResult').style.display = 'block';
+
+        setMessage(
+          $('invitationMessage'),
+          'Invitation generated successfully.',
+          'success'
+        );
+
+      } catch (error) {
+        console.error('Invitation error:', error);
+
+        setMessage(
+          $('invitationMessage'),
+          error.message,
+          'error'
+        );
+
+      } finally {
+        button.disabled = false;
+        button.textContent = 'Generate Invitation Link';
+      }
+    });
+
+    // Copy invitation link
+    $('copyButton').addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(generatedLink);
+        $('copyButton').textContent = 'Copied!';
+
+      } catch {
+        setMessage(
+          $('invitationMessage'),
+          'Could not copy automatically. Select and copy the link manually.',
+          'error'
+        );
+      }
+    });
+
+    // Search participants
+    $('searchButton').addEventListener('click', () => {
+      currentSearch = $('participantSearch').value.trim();
+      currentPage = 1;
+      loadParticipants();
+    });
+
+    $('participantSearch').addEventListener('keydown', event => {
+      if (event.key === 'Enter') {
+        $('searchButton').click();
+      }
+    });
+
+    // Pagination
+    $('previousPage').addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        loadParticipants();
+      }
+    });
+
+    $('nextPage').addEventListener('click', () => {
+      if (currentPage < totalPages) {
+        currentPage++;
+        loadParticipants();
+      }
+    });
+
+    // Export records
+    $('exportButton').addEventListener('click', exportParticipants);
+
+    // Close participant details modal
+    $('closeModal').addEventListener('click', () => {
+      $('participantModal').style.display = 'none';
+    });
+
+    $('participantModal').addEventListener('click', event => {
+      if (event.target === $('participantModal')) {
+        $('participantModal').style.display = 'none';
+      }
+    });
+
+    // SIDEBAR NAVIGATION
+    document.addEventListener('click', event => {
+      const button = event.target.closest('.nav-item');
+
+      if (!button) return;
+
+      const targetId = button.dataset.target;
+      const target = $(targetId);
+
+      if (!target) {
+        console.error(`Navigation target not found: ${targetId}`);
+        return;
+      }
+
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+      });
+
+      button.classList.add('active');
+
+      target.scrollIntoView({
+        behavior:'smooth',
+        block:'start'
+      });
+    });
+
+    // Log out
+    $('logoutButton').addEventListener('click', async () => {
+      if (supabaseClient) {
+        await supabaseClient.auth.signOut();
+      }
+
+      window.location.href = '/staff-login.html';
+    });
+
+
+    // ======================================
+// CHECKED-IN SEEKERS LIST
+// ======================================
+
+async function loadCheckedInParticipants() {
+  const body = $('checkedInBody');
+
+  body.innerHTML = `
+    <tr>
+      <td colspan="5" class="empty-state">
+        Loading checked-in seekers...
+      </td>
+    </tr>
+  `;
+
+  setMessage($('checkedInMessage'), '');
+
+  try {
+    const firstResult = await apiFetch(
+      '/api/staff/records/checked-in?page=1&limit=100'
+    );
+
+    const allCheckedIn = [
+      ...(firstResult.participants || firstResult.data || [])
+    ];
+
+    const totalPages = Number(firstResult.totalPages) || 1;
+
+    for (let page = 2; page <= totalPages; page++) {
+      const result = await apiFetch(
+        `/api/staff/records/checked-in?page=${page}&limit=100`
+      );
+
+      allCheckedIn.push(
+        ...(result.participants || result.data || [])
+      );
+    }
+
+    if (!allCheckedIn.length) {
+      body.innerHTML = `
+        <tr>
+          <td colspan="5" class="empty-state">
+            No seekers have been checked in yet.
+          </td>
+        </tr>
+      `;
+
+      setMessage(
+        $('checkedInMessage'),
+        'No check-in records found.'
+      );
+
+      return;
+    }
+
+    // Display the most recent check-ins first.
+    allCheckedIn.sort((a, b) =>
+      new Date(b.ticket_used_at || 0) -
+      new Date(a.ticket_used_at || 0)
+    );
+
+    body.innerHTML = allCheckedIn.map(person => {
+      const checkinTime = person.ticket_used_at
+        ? new Date(person.ticket_used_at).toLocaleString()
+        : 'Time unavailable';
+
+      return `
+        <tr>
+          <td>
+            ${escapeHtml(person.registration_number)}
+          </td>
+
+          <td>
+            ${escapeHtml(person.full_name)}
+          </td>
+
+          <td>
+            ${escapeHtml(person.tshirt_size || '—')}
+          </td>
+
+          <td>
+            <span class="status ${paymentClass(person.payment_status)}">
+              ${escapeHtml(person.payment_status || 'Unknown')}
+            </span>
+          </td>
+
+          <td>
+            ${escapeHtml(checkinTime)}
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    setMessage(
+      $('checkedInMessage'),
+      `${allCheckedIn.length} seeker(s) checked in.`,
+      'success'
+    );
+
+  } catch (error) {
+    console.error('Checked-in seekers error:', error);
+
+    body.innerHTML = `
+      <tr>
+        <td colspan="5" class="empty-state">
+          Could not load checked-in seekers.
+        </td>
+      </tr>
+    `;
+
+    setMessage(
+      $('checkedInMessage'),
+      error.message,
+      'error'
+    );
+  }
+}
+
+
+// Refresh checked-in list
+$('refreshCheckedInButton').addEventListener(
+  'click',
+  loadCheckedInParticipants
+);
+
+
+// ======================================
+// REGNUM DEI CHECK-IN SYSTEM
+// ======================================
+
+let qrScanner = null;
+let scannerRunning = false;
+let checkinBusy = false;
+
+
+// Display seeker information
+
+function renderCheckinSeeker(seeker) {
+    const result = $('checkinResult');
+
+    const isPaid =
+        String(seeker.paymentStatus || '').toLowerCase() === 'paid';
+
+    const isCheckedIn = Boolean(seeker.checkedIn);
+
+    result.innerHTML = `
+        <div class="checkin-result-card">
+
+            <h3>${escapeHtml(seeker.fullName)}</h3>
+
+            <p>
+                <strong>Seeker ID:</strong>
+                ${escapeHtml(seeker.registrationNumber)}
+            </p>
+
+            <p>
+                <strong>Age:</strong>
+                ${seeker.age ?? 'Not available'}
+            </p>
+
+            <p>
+                <strong>T-shirt Size:</strong>
+                ${escapeHtml(seeker.tshirtSize || 'Not available')}
+            </p>
+
+            <p>
+                <strong>Payment:</strong>
+                ${escapeHtml(seeker.paymentStatus || 'Unknown')}
+            </p>
+
+            <p>
+                <strong>Check-in:</strong>
+                ${isCheckedIn ? 'Already checked in' : 'Not checked in'}
+            </p>
+
+            ${
+                isCheckedIn && seeker.checkedInAt
+                    ? `
+                        <p>
+                            <strong>Checked in at:</strong>
+                            ${new Date(seeker.checkedInAt).toLocaleString()}
+                        </p>
+                    `
+                    : ''
+            }
+
+            ${
+                !isCheckedIn && isPaid
+                    ? `
+                        <button
+                            type="button"
+                            class="checkin-action-button"
+                            id="manualCheckinButton"
+                            data-registration="${escapeHtml(seeker.registrationNumber)}"
+                        >
+                            Check In Seeker
+                        </button>
+                    `
+                    : ''
+            }
+
+            ${
+                !isCheckedIn && !isPaid
+                    ? `
+                        <p style="color:#b63b35;font-weight:700;">
+                            Payment must be completed before check-in.
+                        </p>
+                    `
+                    : ''
+            }
+
+            ${
+                isCheckedIn
+                    ? `
+                        <button
+                            type="button"
+                            class="checkin-action-button reverse-action-button"
+                            id="reverseCheckinButton"
+                            data-registration="${escapeHtml(seeker.registrationNumber)}"
+                        >
+                            Reverse Check-in
+                        </button>
+                    `
+                    : ''
+            }
+
+        </div>
+    `;
+
+    const manualButton = $('manualCheckinButton');
+
+    if (manualButton) {
+        manualButton.addEventListener('click', () => {
+            manualCheckInSeeker(
+                manualButton.dataset.registration
+            );
+        });
+    }
+
+    const reverseButton = $('reverseCheckinButton');
+
+    if (reverseButton) {
+        reverseButton.addEventListener('click', () => {
+            reverseSeekerCheckin(
+                reverseButton.dataset.registration
+            );
+        });
+    }
+}
+
+
+// ======================================
+// LOOK UP SEEKER
+// ======================================
+
+
+async function lookupSeeker() {
+    const registrationNumber =
+        $('checkinRegistrationInput').value.trim();
+
+    if (!registrationNumber) {
+        setMessage(
+            $('checkinMessage'),
+            'Enter a Seeker ID first.',
+            'error'
+        );
+        return;
+    }
+
+    const button = $('lookupSeekerButton');
+
+    button.disabled = true;
+    button.textContent = 'Searching...';
+
+    try {
+        setMessage($('checkinMessage'), 'Searching...');
+
+        $('checkinResult').innerHTML = '';
+
+        const result = await apiFetch(
+            `/api/staff/checkin/lookup/${encodeURIComponent(registrationNumber)}`
+        );
+
+        renderCheckinSeeker(result.seeker);
+
+        setMessage(
+            $('checkinMessage'),
+            'Seeker record found.',
+            'success'
+        );
+
+    } catch (error) {
+        $('checkinResult').innerHTML = '';
+
+        setMessage(
+            $('checkinMessage'),
+            error.message,
+            'error'
+        );
+
+    } finally {
+        button.disabled = false;
+        button.textContent = 'Search Seeker';
+    }
+}
+
+
+async function manualCheckInSeeker(registrationNumber) {
+    if (checkinBusy) return;
+
+    const confirmed = confirm(
+        `Confirm manual check-in for ${registrationNumber}?`
+    );
+
+    if (!confirmed) return;
+
+    checkinBusy = true;
+
+    const button = $('manualCheckinButton');
+
+    if (button) {
+        button.disabled = true;
+        button.textContent = 'Checking in...';
+    }
+
+    try {
+        const result = await apiFetch(
+            '/api/staff/checkin/manual',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    registrationNumber
+                })
+            }
+        );
+
+        renderCheckinSeeker(result.seeker);
+
+        setMessage(
+            $('checkinMessage'),
+            result.message || 'Seeker successfully checked in.',
+            'success'
+        );
+
+        await loadParticipants();
+
+        await loadCheckedInParticipants();
+
+    } catch (error) {
+        setMessage(
+            $('checkinMessage'),
+            error.message,
+            'error'
+        );
+
+        if (button) {
+            button.disabled = false;
+            button.textContent = 'Check In Seeker';
+        }
+
+    } finally {
+        checkinBusy = false;
+    }
+}
+
+
+
+// ======================================
+// VERIFY AND CHECK IN QR TICKET
+// ======================================
+
+async function verifyTicketToken() {
+    if (checkinBusy) return;
+
+    const ticketToken =
+        $('ticketTokenInput').value.trim();
+
+    if (!ticketToken) {
+        setMessage(
+            $('checkinMessage'),
+            'Scan a QR code or enter its ticket token.',
+            'error'
+        );
+
+        return;
+    }
+
+    checkinBusy = true;
+
+    const button = $('verifyTicketButton');
+
+    button.disabled = true;
+    button.textContent = 'Verifying...';
+
+    $('checkinResult').innerHTML = '';
+
+    try {
+        const result = await apiFetch(
+            '/api/staff/checkin',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ ticketToken })
+            }
+        );
+
+        renderCheckinSeeker(result.seeker);
+
+        setMessage(
+            $('checkinMessage'),
+            result.message || 'Seeker successfully checked in.',
+            'success'
+        );
+
+        $('ticketTokenInput').value = '';
+
+       await loadParticipants();
+
+await loadCheckedInParticipants();
+
+    } catch (error) {
+        setMessage(
+            $('checkinMessage'),
+            error.message,
+            'error'
+        );
+
+        // A duplicate ticket may still return the seeker's information.
+        // Look up the record using the ID returned in the error response
+        // only if the API response contains it.
+        $('checkinResult').innerHTML = '';
+    } finally {
+        checkinBusy = false;
+        button.disabled = false;
+        button.textContent = 'Verify & Check In';
+    }
+}
+
+
+// ======================================
+// REVERSE CHECK-IN
+// ADMIN ONLY
+// ======================================
+
+async function reverseSeekerCheckin(registrationNumber) {
+    const confirmed = confirm(
+        `Reverse the check-in for ${registrationNumber}?`
+    );
+
+    if (!confirmed) return;
+
+    try {
+        const result = await apiFetch(
+            `/api/staff/checkin/reverse/${encodeURIComponent(registrationNumber)}`,
+            {
+                method: 'POST'
+            }
+        );
+
+        setMessage(
+            $('checkinMessage'),
+            result.message || 'Check-in reversed.',
+            'success'
+        );
+
+        await lookupSeeker();
+
+        await loadParticipants();
+
+        await loadCheckedInParticipants();
+
+    } catch (error) {
+        setMessage(
+            $('checkinMessage'),
+            error.message,
+            'error'
+        );
+    }
+}
+
+
+// ======================================
+// START CAMERA SCANNER
+// ======================================
+
+async function startQRScanner() {
+    try {
+        if (!window.Html5Qrcode) {
+            throw new Error('QR scanner library could not be loaded.');
+        }
+
+        if (scannerRunning) return;
+
+        qrScanner = new Html5Qrcode('qrReader');
+
+        $('startScannerButton').disabled = true;
+
+        await qrScanner.start(
+            { facingMode: 'environment' },
+            {
+                fps: 10,
+                qrbox: {
+                    width: 250,
+                    height: 250
+                }
+            },
+            async decodedText => {
+                if (checkinBusy) return;
+
+                $('ticketTokenInput').value = decodedText;
+
+                await stopQRScanner();
+
+                await verifyTicketToken();
+            },
+            () => {
+                // Ignore individual unsuccessful camera frames.
+            }
+        );
+
+        scannerRunning = true;
+
+$('stopScannerButton').disabled = false;
+
+setMessage(
+    $('checkinMessage'),
+    'Camera ready. Point it at a seeker\'s QR ticket.',
+    'success'
+);
+
+} catch (error) {
+    console.error('QR scanner error:', error);
+
+        setMessage(
+            $('checkinMessage'),
+            error.message ||
+                'Could not start the camera. Check camera permission and use HTTPS or localhost.',
+            'error'
+        );
+
+        $('startScannerButton').disabled = false;
+    }
+}
+
+
+// ======================================
+// STOP CAMERA SCANNER
+// ======================================
+
+async function stopQRScanner() {
+    if (!qrScanner || !scannerRunning) {
+        $('startScannerButton').disabled = false;
+        $('stopScannerButton').disabled = true;
+        return;
+    }
+
+    try {
+        await qrScanner.stop();
+        await qrScanner.clear();
+
+    } catch (error) {
+        console.error('Scanner stop error:', error);
+
+    } finally {
+        scannerRunning = false;
+        qrScanner = null;
+
+        $('startScannerButton').disabled = false;
+        $('stopScannerButton').disabled = true;
+    }
+}
+
+
+// ======================================
+// CHECK-IN EVENT LISTENERS
+// ======================================
+
+$('verifyTicketButton').addEventListener(
+    'click',
+    verifyTicketToken
+);
+
+$('ticketTokenInput').addEventListener('keydown', event => {
+    if (event.key === 'Enter') {
+        verifyTicketToken();
+    }
+});
+
+$('lookupSeekerButton').addEventListener(
+    'click',
+    lookupSeeker
+);
+
+$('checkinRegistrationInput').addEventListener('keydown', event => {
+    if (event.key === 'Enter') {
+        lookupSeeker();
+    }
+});
+
+$('startScannerButton').addEventListener(
+    'click',
+    startQRScanner
+);
+
+$('stopScannerButton').addEventListener(
+    'click',
+    stopQRScanner
+);
+
+
+
+    // Start dashboard
+    initializeDashboard();
+  </script>
+</body>
+</html>

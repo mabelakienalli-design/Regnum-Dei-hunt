@@ -42,6 +42,60 @@
         </section>
 
 
+<!-- SEEKER ID RECOVERY -->
+<section class="form-section" id="recoverySection">
+
+    <h2>Already Registered?</h2>
+    <p>Recover your Seeker ID or continue an incomplete payment.</p>
+
+    <div class="form-group">
+        <label for="recoveryEmail">Registered Email Address</label>
+        <input type="email" id="recoveryEmail"
+            placeholder="Enter registered email">
+    </div>
+
+    <div class="form-group">
+        <label for="recoveryFullName">Player's Full Name</label>
+        <input type="text" id="recoveryFullName"
+            placeholder="Enter full name used during registration">
+    </div>
+
+    <div class="form-group">
+        <label for="recoveryDateOfBirth">Date of Birth</label>
+        <input type="date" id="recoveryDateOfBirth">
+    </div>
+
+    <button type="button" id="recoveryVerifyButton" class="submit-button">
+        Send Verification Code
+    </button>
+
+    <div id="recoveryOtpGroup" style="display: none;">
+        <div class="form-group">
+            <label for="recoveryOtp">Six-Digit Verification Code</label>
+            <input type="text" id="recoveryOtp"
+                maxlength="6" inputmode="numeric">
+        </div>
+
+        <button type="button" id="recoveryConfirmButton" class="submit-button">
+            Verify Email
+        </button>
+    </div>
+
+    <p id="recoveryMessage" class="field-note"></p>
+
+    <div id="recoveredRegistration" style="display: none;">
+        <p>Your Seeker ID:</p>
+        <strong id="recoveredSeekerId"></strong>
+        <p id="recoveredPaymentStatus"></p>
+
+        <button type="button" id="recoveredPayButton" class="submit-button">
+            Continue to Payment
+        </button>
+    </div>
+
+</section>
+
+
         <!-- REGISTRATION FORM -->
         <form id="registrationForm">
 
@@ -164,22 +218,61 @@
 </div>
 
 
-    <!-- EMAIL -->
-    <div class="form-group">
+   <!-- EMAIL -->
+<div class="form-group">
 
-        <label for="email">
-            Email Address
-        </label>
+    <label for="email">
+        Email Address
+    </label>
 
     <input
-    type="email"
-    id="email"
-    name="email"
-    placeholder="example@gmail.com"
-    required
->
+        type="email"
+        id="email"
+        name="email"
+        placeholder="example@gmail.com"
+        required
+    >
+
+    <button
+        type="button"
+        id="verifyEmailButton"
+        class="submit-button"
+    >
+
+
+
+        Verify Email
+    </button>
+
+    <p id="emailVerificationMessage" class="field-note"></p>
+
+    <!-- OTP VERIFICATION -->
+    <div id="otpVerificationGroup" style="display: none;">
+
+        <label for="emailOtp">
+            Enter the 6-digit verification code
+        </label>
+
+        <input
+            type="text"
+            id="emailOtp"
+            placeholder="Enter verification code"
+            maxlength="6"
+            inputmode="numeric"
+            autocomplete="one-time-code"
+        >
+
+        <button
+            type="button"
+            id="confirmEmailButton"
+            class="submit-button"
+        >
+            Confirm Code
+        </button>
 
     </div>
+
+</div>
 
 
     <!-- HOME CHURCH / COMMUNITY -->

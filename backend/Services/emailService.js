@@ -786,6 +786,31 @@ if (emailProvider === 'resend') {
     }
 };
 
+
+const sendEmailVerificationCode = async (to, code) => {
+    const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to,
+        subject: 'Verify Your Email — REGNUM DEI',
+        html: `
+            <div style="font-family: Arial, sans-serif; padding: 20px;">
+                <h2>REGNUM DEI Email Verification</h2>
+                <p>Use the code below to verify your email address:</p>
+                <h1 style="letter-spacing: 8px; color: #c9a227;">
+                    ${code}
+                </h1>
+                <p>This code expires in 10 minutes.</p>
+                <p>If you did not request this code, ignore this email.</p>
+            </div>
+        `
+    };
+
+    await transporter.sendMail(mailOptions);
+};
+
+
+
 module.exports = {
-    sendTicketEmail
+    sendTicketEmail,
+    sendEmailVerificationCode
 };

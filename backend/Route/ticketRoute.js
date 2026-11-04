@@ -1,9 +1,11 @@
+
 const express = require('express');
 const router = express.Router();
 
 const ticketController = require('../Controller/ticketController');
 
-router.get('/verify/:ticketToken', ticketController.verifyTicket);
+// Public ticket retrieval for the seeker's ticket page.
+// Check-in is handled separately through authenticated staff routes.
 router.get('/:regNumber', ticketController.getTicket);
 
 module.exports = router;

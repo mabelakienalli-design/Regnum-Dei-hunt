@@ -6,6 +6,35 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const submitButton = document.getElementById('submitButton');
 
+    // EMAIL VERIFICATION
+const emailInput = document.getElementById('email');
+const verifyEmailButton = document.getElementById('verifyEmailButton');
+const otpVerificationGroup = document.getElementById('otpVerificationGroup');
+const emailOtp = document.getElementById('emailOtp');
+const confirmEmailButton = document.getElementById('confirmEmailButton');
+const emailVerificationMessage = document.getElementById('emailVerificationMessage');
+const successSection = document.getElementById('successSection');
+const registrationNumber = document.getElementById('registrationNumber');
+
+let verificationToken = null;
+let verifiedEmail = null;
+
+// SEEKER ID RECOVERY
+const recoveryEmail = document.getElementById('recoveryEmail');
+const recoveryFullName = document.getElementById('recoveryFullName');
+const recoveryDateOfBirth = document.getElementById('recoveryDateOfBirth');
+const recoveryVerifyButton = document.getElementById('recoveryVerifyButton');
+const recoveryOtpGroup = document.getElementById('recoveryOtpGroup');
+const recoveryOtp = document.getElementById('recoveryOtp');
+const recoveryConfirmButton = document.getElementById('recoveryConfirmButton');
+const recoveryMessage = document.getElementById('recoveryMessage');
+const recoveredRegistration = document.getElementById('recoveredRegistration');
+const recoveredSeekerId = document.getElementById('recoveredSeekerId');
+const recoveredPaymentStatus = document.getElementById('recoveredPaymentStatus');
+const recoveredPayButton = document.getElementById('recoveredPayButton');
+
+let recoveryVerificationToken = null;
+
     const continueToPaymentButton =
     document.getElementById('continueToPaymentButton');
 
@@ -26,19 +55,338 @@ const paymentSeekerId =
         document.getElementById('emergencyContactPhone');
 
 
+        // =========================
+// REQUEST RECOVERY OTP
+// =========================
+
+recoveryVerifyButton.addEventListener('click', async function () {
+
+    const email = recoveryEmail.value.trim().toLowerCase();
+    const fullName = recoveryFullName.value.trim();
+    const dateOfBirth = recoveryDateOfBirth.value;
+
+    if (!email || !fullName || !dateOfBirth) {
+        alert('Please enter the email, full name and date of birth.');
+        return;
+    }
+
+    if (!recoveryEmail.checkValidity()) {
+        alert('Please enter a valid email address.');
+        return;
+    }
+
+    try {
+        recoveryVerifyButton.disabled = true;
+        recoveryVerifyButton.textContent = 'Sending Code...';
+
+        const response = await fetch('/api/participants/verify-email/request', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            alert(data.message || 'Could not send verification code.');
+            return;
+        }
+
+        recoveryOtpGroup.style.display = 'block';
+        recoveryMessage.textContent =
+            'Verification code sent. Please check your inbox.';
+        recoveryMessage.style.color = 'green';
+
+    } catch (error) {
+        console.error('Recovery OTP error:', error);
+        alert('Could not connect to the server. Please try again.');
+
+    } finally {
+        recoveryVerifyButton.disabled = false;
+        recoveryVerifyButton.textContent = 'Send Verification Code';
+    }
+
+});
+
+
+// =========================
+// CONFIRM RECOVERY OTP
+// =========================
+
+recoveryConfirmButton.addEventListener('click', async function () {
+
+    const email = recoveryEmail.value.trim().toLowerCase();
+    const code = recoveryOtp.value.trim();
+
+    if (!/^\d{6}$/.test(code)) {
+        alert('Please enter the six-digit verification code.');
+        return;
+    }
+
+    try {
+        recoveryConfirmButton.disabled = true;
+        recoveryConfirmButton.textContent = 'Verifying...';
+
+        // Verify email OTP
+        const verifyResponse = await fetch(
+            '/api/participants/verify-email/confirm',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, code })
+            }
+        );
+
+        const verifyData = await verifyResponse.json();
+
+        if (!verifyResponse.ok) {
+            alert(verifyData.message || 'Email verification failed.');
+            return;
+        }
+
+        recoveryVerificationToken = verifyData.verificationToken;
+
+        // Recover the player's registration
+        const recoveryResponse = await fetch(
+            '/api/participants/recover-seeker-id',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email,
+                    fullName: recoveryFullName.value.trim(),
+                    dateOfBirth: recoveryDateOfBirth.value,
+                    verificationToken: recoveryVerificationToken
+                })
+            }
+        );
+
+        const recoveryData = await recoveryResponse.json();
+
+        if (!recoveryResponse.ok) {
+            alert(recoveryData.message || 'Could not recover registration.');
+            return;
+        }
+
+        recoveredSeekerId.textContent = recoveryData.registrationNumber;
+        recoveredPaymentStatus.textContent =
+            `Payment status: ${recoveryData.paymentStatus}`;
+
+        recoveredRegistration.style.display = 'block';
+        recoveryMessage.textContent = 'Registration recovered successfully!';
+        recoveryMessage.style.color = 'green';
+
+        recoveryVerificationToken = null;
+
+    } catch (error) {
+        console.error('Recovery error:', error);
+        alert('Could not complete recovery. Please try again.');
+
+    } finally {
+        recoveryConfirmButton.disabled = false;
+        recoveryConfirmButton.textContent = 'Verify Email';
+    }
+
+});
+
+
+// =========================
+// RETRY RECOVERED PAYMENT
+// =========================
+
+recoveredPayButton.addEventListener('click', async function () {
+
+    const seekerId = recoveredSeekerId.textContent.trim();
+
+    if (!seekerId) {
+        alert('Seeker ID could not be found.');
+        return;
+    }
+
+    try {
+        recoveredPayButton.disabled = true;
+        recoveredPayButton.textContent = 'Connecting to payment...';
+
+        const response = await fetch(
+            `/api/payments/initialize/${encodeURIComponent(seekerId)}`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            alert(data.message || 'Could not initialize payment.');
+            return;
+        }
+
+        window.location.href = data.authorizationUrl;
+
+    } catch (error) {
+        console.error('Recovery payment error:', error);
+        alert('Could not connect to the payment server.');
+
+    } finally {
+        recoveredPayButton.disabled = false;
+        recoveredPayButton.textContent = 'Continue to Payment';
+    }
+
+});
+
     // =========================
     // T&C CHECKBOX
     // =========================
 
-    termsAgreement.addEventListener('change', function () {
+   termsAgreement.addEventListener('change', function () {
 
-        if (termsAgreement.checked) {
-            submitButton.disabled = false;
-        } else {
-            submitButton.disabled = true;
+    submitButton.disabled = !(
+        termsAgreement.checked &&
+        verificationToken &&
+        verifiedEmail === emailInput.value.trim().toLowerCase()
+    );
+
+});
+
+
+// =========================
+// REQUEST EMAIL VERIFICATION
+// =========================
+
+verifyEmailButton.addEventListener('click', async function () {
+
+    const email = emailInput.value.trim().toLowerCase();
+
+    if (!emailInput.checkValidity()) {
+        alert('Please enter a valid email address.');
+        emailInput.focus();
+        return;
+    }
+
+    try {
+
+        verifyEmailButton.disabled = true;
+        verifyEmailButton.textContent = 'Sending Code...';
+
+        const response = await fetch(
+            '/api/participants/verify-email/request',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email })
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            alert(data.message || 'Could not send verification code.');
+            return;
         }
 
-    });
+        otpVerificationGroup.style.display = 'block';
+
+        emailVerificationMessage.textContent =
+            'Verification code sent. Please check your inbox.';
+
+        emailVerificationMessage.style.color = 'green';
+
+    } catch (error) {
+
+        console.error('Email verification request error:', error);
+
+        alert('Could not connect to the server. Please try again.');
+
+    } finally {
+
+        verifyEmailButton.disabled = false;
+        verifyEmailButton.textContent = 'Verify Email';
+
+    }
+
+});
+
+
+// =========================
+// CONFIRM EMAIL VERIFICATION
+// =========================
+
+confirmEmailButton.addEventListener('click', async function () {
+
+    const email = emailInput.value.trim().toLowerCase();
+    const code = emailOtp.value.trim();
+
+    if (!/^\d{6}$/.test(code)) {
+        alert('Please enter the six-digit verification code.');
+        emailOtp.focus();
+        return;
+    }
+
+    try {
+
+        confirmEmailButton.disabled = true;
+        confirmEmailButton.textContent = 'Verifying...';
+
+        const response = await fetch(
+            '/api/participants/verify-email/confirm',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email, code })
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            alert(data.message || 'Email verification failed.');
+            return;
+        }
+
+        verificationToken = data.verificationToken;
+        verifiedEmail = email;
+
+        emailVerificationMessage.textContent =
+            'Email successfully verified!';
+
+        emailVerificationMessage.style.color = 'green';
+
+        emailInput.readOnly = true;
+        emailOtp.disabled = true;
+        verifyEmailButton.disabled = true;
+        confirmEmailButton.textContent = 'Email Verified';
+
+        submitButton.disabled = !termsAgreement.checked;
+
+    } catch (error) {
+
+        console.error('Email confirmation error:', error);
+
+        alert('Could not verify your email. Please try again.');
+
+    } finally {
+
+        if (!verificationToken) {
+            confirmEmailButton.disabled = false;
+            confirmEmailButton.textContent = 'Confirm Code';
+        }
+
+    }
+
+});
 
 
     // =========================
@@ -73,9 +421,9 @@ const paymentSeekerId =
 
         if (age < 15 || age > 22) {
 
-            alert(
-                'Sorry, REGNUM DEI is only open to participants between 15 and 22 years old.'
-            );
+           alert(
+    'Sorry, you do not meet the eligibility requirements for REGNUM DEI HUNT.'
+);
 
             dateOfBirth.value = '';
 
@@ -129,6 +477,19 @@ hasMedicalConditions.addEventListener('change', function () {
         event.preventDefault();
 
 
+        // Ensure email has been verified
+const currentEmail = emailInput.value.trim().toLowerCase();
+
+if (
+    !verificationToken ||
+    !verifiedEmail ||
+    verifiedEmail !== currentEmail
+) {
+    alert('Please verify your email address before continuing.');
+    return;
+}
+
+
         // =========================
         // PHONE VALIDATION
         // =========================
@@ -176,8 +537,7 @@ const email = document.getElementById('email');
 
 const emailValue = email.value.trim();
 
-const emailPattern =
-    /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 
 if (!emailValue) {
@@ -247,6 +607,8 @@ const formData = {
 
     email:
         emailValue,
+
+    verificationToken: verificationToken,
 
     homeChurchCommunity:
         document.getElementById('homeChurchCommunity').value.trim(),
@@ -339,11 +701,6 @@ try {
 // SHOW SUCCESS SECTION
 // =========================
 
-const successSection =
-    document.getElementById('successSection');
-
-const registrationNumber =
-    document.getElementById('registrationNumber');
 
 // Put the actual registration number from the backend
 registrationNumber.textContent =
