@@ -3,6 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 const staffController = require('../Controller/staffController');
+const participantController = require('../Controller/participantController');
 
 const {
     staffAuth,
@@ -24,6 +25,15 @@ router.post(
     staffController.registerStaff
 );
 
+router.post(
+    '/verify-email/request',
+    participantController.requestEmailVerification
+);
+
+router.post(
+    '/verify-email/confirm',
+    participantController.verifyEmailCode
+);
 
 // ======================================
 // ADMIN-ONLY ROUTES

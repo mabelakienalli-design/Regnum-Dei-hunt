@@ -267,8 +267,9 @@ exports.requestEmailVerification = async (req, res) => {
         await sendEmailVerificationCode(email, code);
 
         return res.status(200).json({
-            message: 'Verification code sent. Please check your email.'
-        });
+    success: true,
+    message: 'Verification code sent. Please check your email.'
+});
 
     } catch (error) {
         console.error('Email verification error:', error);
@@ -382,10 +383,11 @@ const isCorrect =
             });
         }
 
-        return res.status(200).json({
-            message: 'Email verified successfully.',
-            verificationToken
-        });
+      return res.status(200).json({
+    success: true,
+    message: 'Email verified successfully.',
+    verificationToken
+});
 
     } catch (error) {
         console.error('OTP verification error:', error);

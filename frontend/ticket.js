@@ -1,87 +1,60 @@
-const saveTicketButton =
-    document.getElementById('saveTicketButton');
+const saveTicketButton = document.getElementById("saveTicketButton");
 
-document.addEventListener('DOMContentLoaded', async function () {
+document.addEventListener("DOMContentLoaded", async function () {
+  // Get Seeker ID from the URL
+  const urlParams = new URLSearchParams(window.location.search);
 
-    // Get Seeker ID from the URL
-    const urlParams = new URLSearchParams(window.location.search);
+  const registrationNumber = urlParams.get("regNumber");
 
-    const registrationNumber =
-        urlParams.get('regNumber');
+  // Check if Seeker ID exists
+  if (!registrationNumber) {
+    alert("No Seeker ID was provided.");
 
-    // Check if Seeker ID exists
-    if (!registrationNumber) {
+    return;
+  }
 
-        alert('No Seeker ID was provided.');
+  try {
+    // Request ticket information from backend
+    const response = await fetch(`/api/tickets/${registrationNumber}`);
 
-        return;
+    const data = await response.json();
+
+    // Check for errors
+    if (!response.ok) {
+      alert(data.message || "Could not retrieve your ticket.");
+
+      return;
     }
 
-    try {
+    // Display Seeker ID
+    document.getElementById("ticketRegistrationNumber").textContent =
+      data.registrationNumber;
 
-        // Request ticket information from backend
-        const response = await fetch(
-            `http://localhost:5000/api/tickets/${registrationNumber}`
-        );
+    // Display participant name
+    document.getElementById("ticketFullName").textContent = data.fullName;
 
-        const data = await response.json();
+    // Generate QR code
+    new QRCode(document.getElementById("qrCode"), {
+      text: data.ticketToken,
+      width: 200,
+      height: 200,
+    });
 
-        // Check for errors
-        if (!response.ok) {
+    // We'll use data.ticketToken
+    // for the QR code in the next step
 
-            alert(
-                data.message ||
-                'Could not retrieve your ticket.'
-            );
+    console.log("Ticket data:", data);
+  } catch (error) {
+    console.error("Ticket loading error:", error);
 
-            return;
-        }
+    alert("We could not connect to the ticket server.");
+  }
 
-        // Display Seeker ID
-        document.getElementById(
-            'ticketRegistrationNumber'
-        ).textContent = data.registrationNumber;
+  // =========================
+  // SAVE TICKET
+  // =========================
 
-        // Display participant name
-        document.getElementById(
-            'ticketFullName'
-        ).textContent = data.fullName;
-
-        // Generate QR code
-new QRCode(
-    document.getElementById('qrCode'),
-    {
-        text: data.ticketToken,
-        width: 200,
-        height: 200
-    }
-);
-
-        // We'll use data.ticketToken
-        // for the QR code in the next step
-
-        console.log('Ticket data:', data);
-
-    } catch (error) {
-
-        console.error(
-            'Ticket loading error:',
-            error
-        );
-
-        alert(
-            'We could not connect to the ticket server.'
-        );
-    }
-
-// =========================
-// SAVE TICKET
-// =========================
-
-saveTicketButton.addEventListener('click', function () {
-
+  saveTicketButton.addEventListener("click", function () {
     window.print();
-
-});
-
+  });
 });
