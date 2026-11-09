@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Volunteer Dashboard | REGNUM DEI</title>
+    <link rel="stylesheet" href="css/volunteer-dashboard.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script defer src="js/volunteer-dashboard.js"></script>
+</head>
+<body>
+    <header class="topbar">
+        <div class="brand"><span>REGNUM DEI</span><small>VOLUNTEER PORTAL</small></div>
+        <div class="account">
+            <div><strong id="staffName">Loading...</strong><small id="staffDepartment">Volunteer</small></div>
+            <button id="logoutButton" class="outline-button" type="button">Log Out</button>
+        </div>
+    </header>
+
+    <main class="dashboard">
+        <section class="welcome">
+            <div><p class="eyebrow">STAFF WORKSPACE</p><h1>Volunteer Dashboard</h1><p>Welcome back. Here's what's happening with seeker registration and check-in.</p></div>
+            <button id="refreshButton" class="gold-button" type="button">Refresh Data</button>
+        </section>
+
+        <section class="stats" aria-label="Registration statistics">
+            <article class="stat-card"><span>Paid Seekers</span><strong id="paidCount">—</strong></article>
+            <article class="stat-card"><span>Pending Payments</span><strong id="pendingCount">—</strong></article>
+            <article class="stat-card"><span>Checked In</span><strong id="checkedInCount">—</strong></article>
+        </section>
+
+        <section class="panel checkin-panel">
+            <div class="panel-heading"><div><p class="eyebrow">ENTRY DESK</p><h2>Manual Check-In</h2><p>Enter the seeker's registration number if their QR ticket cannot be scanned.</p></div></div>
+            <form id="checkinForm" class="checkin-form">
+                <label for="registrationNumber">Seeker ID</label>
+                <div class="checkin-controls"><input id="registrationNumber" name="registrationNumber" placeholder="e.g. RDH-26-7771" autocomplete="off" required><button id="checkinButton" class="gold-button" type="submit">Check In Seeker</button></div>
+            </form>
+            <p id="checkinMessage" class="message" role="status" aria-live="polite"></p>
+            <div id="seekerResult" class="seeker-result" hidden></div>
+        </section>
+
+        <section class="panel">
+            <div class="panel-heading list-heading">
+                <div><p class="eyebrow">SEEKER DIRECTORY</p><h2>Registered Seekers</h2><p>Only the information required for volunteer duties is shown here.</p></div>
+                <form id="searchForm" class="search-form"><input id="searchInput" type="search" placeholder="Search name or RDH ID"><button class="outline-button" type="submit">Search</button></form>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>Seeker ID</th><th>Full Name</th><th>Age</th><th>T-shirt</th><th>Payment</th></tr></thead>
+                    <tbody id="participantRows"><tr><td colspan="5" class="empty">Loading seeker records...</td></tr></tbody>
+                </table>
+            </div>
+            <div class="pagination"><span id="pageInfo">Page 1</span><div><button id="previousPage" class="outline-button" type="button" disabled>Previous</button><button id="nextPage" class="outline-button" type="button" disabled>Next</button></div></div>
+            <p id="directoryMessage" class="message" role="status"></p>
+        </section>
+    </main>
+</body>
+</html>
