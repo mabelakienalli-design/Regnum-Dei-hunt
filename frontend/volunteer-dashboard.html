@@ -6,6 +6,7 @@
     <title>Volunteer Dashboard | REGNUM DEI</title>
     <link rel="stylesheet" href="css/volunteer-dashboard.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://unpkg.com/html5-qrcode"></script>
     <script defer src="js/volunteer-dashboard.js"></script>
 </head>
 <body>
@@ -31,6 +32,16 @@
 
         <section class="panel checkin-panel">
             <div class="panel-heading"><div><p class="eyebrow">ENTRY DESK</p><h2>Manual Check-In</h2><p>Enter the seeker's registration number if their QR ticket cannot be scanned.</p></div></div>
+            <div class="scanner-section">
+                <p class="scanner-description">Scan a seeker's ticket QR code to verify the ticket and record their arrival.</p>
+                <div class="scanner-controls">
+                    <button id="startScannerButton" class="gold-button" type="button">Start QR Scanner</button>
+                    <button id="stopScannerButton" class="outline-button" type="button" disabled>Stop Scanner</button>
+                </div>
+                <div id="qrReader" aria-label="QR code camera scanner"></div>
+                <p id="scannerMessage" class="message" role="status" aria-live="polite"></p>
+            </div>
+            <div class="manual-divider"><span>OR CHECK IN MANUALLY</span></div>
             <form id="checkinForm" class="checkin-form">
                 <label for="registrationNumber">Seeker ID</label>
                 <div class="checkin-controls"><input id="registrationNumber" name="registrationNumber" placeholder="e.g. RDH-26-7771" autocomplete="off" required><button id="checkinButton" class="gold-button" type="submit">Check In Seeker</button></div>
