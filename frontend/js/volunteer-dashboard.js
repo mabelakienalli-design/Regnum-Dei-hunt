@@ -39,6 +39,7 @@ async function initializeDashboard() {
         $('staffName').textContent = result.staff.full_name || 'Volunteer';
         $('staffDepartment').textContent = result.staff.department || 'Volunteer';
         await loadParticipants();
+        await loadCheckedInParticipants();
     } catch (error) {
         $('directoryMessage').textContent = error.message || 'Unable to load the volunteer dashboard.';
         if (!accessToken) window.location.replace('/staff-login.html');
@@ -53,6 +54,63 @@ async function apiRequest(url, options = {}) {
             Authorization: `Bearer ${accessToken}`
         }
     });
+}
+
+async function loadCheckedInParticipants() {
+    const rows = $('checkedInRows');
+    const message = $('checkedInMessage');
+    message.textContent = 'Loading checked-in seekers...';
+
+    try {
+        const response = await apiRequest('/api/staff/records/checked-in?page=1&limit=100');
+        const result = await response.json();
+        if (!response.ok || !result.success) {
+            throw new Error(result.message || 'Unable to load checked-in seekers.');
+        }
+
+        const people = result.participants || [];
+        if (people.length === 0) {
+            rows.innerHTML = '<tr><td colspan="5" class="empty">No seekers have checked in yet.</td></tr>';
+            message.textContent = 'No check-in records found.';
+            return;
+        }
+
+        rows.replaceChildren(...people.map(person => {
+            const tr = document.createElement('tr');
+            const values = [
+                person.registration_number,
+                person.full_name,
+                person.tshirt_size || '—'
+            ];
+
+            values.forEach(value => {
+                const td = document.createElement('td');
+                td.textContent = value || '—';
+                tr.appendChild(td);
+            });
+
+            const paymentCell = document.createElement('td');
+            const status = document.createElement('span');
+            status.className = 'status ' + (person.payment_status === 'paid' ? 'paid' : 'pending');
+            status.textContent = person.payment_status || 'Unknown';
+            paymentCell.appendChild(status);
+            tr.appendChild(paymentCell);
+
+            const timeCell = document.createElement('td');
+            timeCell.textContent = person.ticket_used_at
+                ? new Date(person.ticket_used_at).toLocaleString()
+                : 'Time unavailable';
+            tr.appendChild(timeCell);
+
+            return tr;
+        }));
+
+        message.textContent = `${result.total || people.length} seeker(s) checked in.`;
+    } catch (error) {
+        rows.innerHTML = '<tr><td colspan="5" class="empty">Could not load checked-in seekers.</td></tr>';
+        message.textContent = error.message;
+        message.className = 'message error';
+    }
 }
 
 async function loadParticipants() {
@@ -128,6 +186,7 @@ checkinForm.addEventListener('submit', async (event) => {
         checkinMessage.className = 'message success';
         $('registrationNumber').value = '';
         await loadParticipants();
+        await loadCheckedInParticipants();
     } catch (error) {
         checkinMessage.textContent = error.message;
         checkinMessage.className = 'message error';
@@ -160,7 +219,11 @@ $('previousPage').addEventListener('click', async () => {
 $('nextPage').addEventListener('click', async () => {
     if (currentPage < totalPages) { currentPage++; await loadParticipants(); }
 });
-refreshButton.addEventListener('click', loadParticipants);
+refreshButton.addEventListener('click', async () => {
+    await loadParticipants();
+    await loadCheckedInParticipants();
+});
+$('refreshCheckedInButton').addEventListener('click', loadCheckedInParticipants);
 
 logoutButton.addEventListener('click', async () => {
     logoutButton.disabled = true;
