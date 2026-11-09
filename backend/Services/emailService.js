@@ -1,50 +1,46 @@
-const nodemailer = require('nodemailer');
-const path = require('path');
-const fs = require('fs');
-const { Resend } = require('resend');
+const nodemailer = require("nodemailer");
+const path = require("path");
+const fs = require("fs");
+const { Resend } = require("resend");
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-const emailProvider = process.env.EMAIL_PROVIDER || 'gmail';
+const emailProvider = process.env.EMAIL_PROVIDER || "gmail";
 
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-    }
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
 });
 
 const sendTicketEmail = async (
-    to,
-    fullName,
-    age,
-    registrationNumber,
-    qrCodeDataUrl
+  to,
+  fullName,
+  age,
+  registrationNumber,
+  qrCodeDataUrl,
 ) => {
-    try {
+  try {
+    // Remove the beginning of the QR code data URL
+    const qrCodeBase64 = qrCodeDataUrl.replace(/^data:image\/png;base64,/, "");
 
-        // Remove the beginning of the QR code data URL
-        const qrCodeBase64 = qrCodeDataUrl.replace(
-            /^data:image\/png;base64,/,
-            ''
-        );
+    // Location of the REGNUM DEI logo
+    const logoPath = path.join(
+      __dirname,
+      "..",
+      "Assets",
+      "regnum-dei-logo.png",
+    );
 
-        // Location of the REGNUM DEI logo
-        const logoPath = path.join(
-            __dirname,
-            '..',
-            'assets',
-            'regnum-dei-logo.png'
-        );
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to,
 
-       const mailOptions = {
-            from: process.env.EMAIL_USER,
-            to,
+      subject: "Your REGNUM DEI Entry Ticket — Welcome to the Kingdom",
 
-            subject: 'Your REGNUM DEI Entry Ticket — Welcome to the Kingdom',
-
-            html: `
+      html: `
                 <!DOCTYPE html>
                 <html>
                 <head>
@@ -730,69 +726,65 @@ const sendTicketEmail = async (
                 </html>
             `,
 
-            attachments: [
+      attachments: [
+        // QR Code
+        {
+          filename: "regnum-dei-ticket.png",
+          content: qrCodeBase64,
+          encoding: "base64",
+          cid: "regnumdeiticket",
+        },
 
-                // QR Code
-                {
-                    filename: 'regnum-dei-ticket.png',
-                    content: qrCodeBase64,
-                    encoding: 'base64',
-                    cid: 'regnumdeiticket'
-                },
+        // REGNUM DEI Logo
+        {
+          filename: "regnum-dei-logo.png",
+          path: logoPath,
+          cid: "regnumdeilogo",
+        },
+      ],
+    };
 
-                // REGNUM DEI Logo
-                {
-                    filename: 'regnum-dei-logo.png',
-                    path: logoPath,
-                    cid: 'regnumdeilogo'
-                }
-
-            ]
-        };
-
-if (emailProvider === 'resend') {
-    const { data, error } = await resend.emails.send({
-        from: 'REGNUM DEI <onboarding@resend.dev>',
+    if (emailProvider === "resend") {
+      const { data, error } = await resend.emails.send({
+        from: "REGNUM DEI <onboarding@resend.dev>",
         to: [to],
         subject: mailOptions.subject,
         html: mailOptions.html,
         attachments: [
-            {
-                filename: 'regnum-dei-ticket.png',
-                content: qrCodeBase64,
-                content_id: 'regnumdeiticket'
-            },
-            {
-                filename: 'regnum-dei-logo.png',
-                content: fs.readFileSync(logoPath).toString('base64'),
-                content_id: 'regnumdeilogo'
-            }
-        ]
-    });
+          {
+            filename: "regnum-dei-ticket.png",
+            content: qrCodeBase64,
+            content_id: "regnumdeiticket",
+          },
+          {
+            filename: "regnum-dei-logo.png",
+            content: fs.readFileSync(logoPath).toString("base64"),
+            content_id: "regnumdeilogo",
+          },
+        ],
+      });
 
-    if (error) {
+      if (error) {
         throw new Error(error.message);
-    }
+      }
 
-    console.log('Ticket email sent successfully through Resend:', data.id);
-} else {
-    await transporter.sendMail(mailOptions);
-    console.log('Ticket email sent successfully through Gmail:', to);
-}
-
-    } catch (error) {
-        console.error('Ticket email sending error:', error);
-        throw error;
+      console.log("Ticket email sent successfully through Resend:", data.id);
+    } else {
+      await transporter.sendMail(mailOptions);
+      console.log("Ticket email sent successfully through Gmail:", to);
     }
+  } catch (error) {
+    console.error("Ticket email sending error:", error);
+    throw error;
+  }
 };
 
-
 const sendEmailVerificationCode = async (to, code) => {
-    const mailOptions = {
-        from: process.env.EMAIL_USER,
-        to,
-        subject: 'Verify Your Email — REGNUM DEI',
-        html: `
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to,
+    subject: "Verify Your Email — REGNUM DEI",
+    html: `
             <div style="font-family: Arial, sans-serif; padding: 20px;">
                 <h2>REGNUM DEI Email Verification</h2>
                 <p>Use the code below to verify your email address:</p>
@@ -802,15 +794,13 @@ const sendEmailVerificationCode = async (to, code) => {
                 <p>This code expires in 10 minutes.</p>
                 <p>If you did not request this code, ignore this email.</p>
             </div>
-        `
-    };
+        `,
+  };
 
-    await transporter.sendMail(mailOptions);
+  await transporter.sendMail(mailOptions);
 };
 
-
-
 module.exports = {
-    sendTicketEmail,
-    sendEmailVerificationCode
+  sendTicketEmail,
+  sendEmailVerificationCode,
 };
