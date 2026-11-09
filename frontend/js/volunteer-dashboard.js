@@ -113,6 +113,121 @@ async function loadCheckedInParticipants() {
     }
 }
 
+let qrScanner = null;
+let scannerRunning = false;
+let qrCheckinBusy = false;
+
+function setScannerMessage(message, type = '') {
+    const element = $('scannerMessage');
+    element.textContent = message;
+    element.className = `message ${type}`.trim();
+}
+
+async function verifyScannedTicket(ticketToken) {
+    if (qrCheckinBusy) return;
+    qrCheckinBusy = true;
+    const startButton = $('startScannerButton');
+    startButton.disabled = true;
+    setScannerMessage('Verifying ticket...', '');
+
+    try {
+        const response = await apiRequest('/api/staff/checkin', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ ticketToken })
+        });
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            if (result.seeker) showSeekerResult(result.seeker);
+            throw new Error(result.message || 'Ticket verification failed.');
+        }
+
+        showSeekerResult(result.seeker);
+        setScannerMessage(result.message || 'Ticket verified. Seeker checked in successfully.', 'success');
+        await loadParticipants();
+        await loadCheckedInParticipants();
+    } catch (error) {
+        setScannerMessage(error.message || 'Unable to verify this QR ticket.', 'error');
+    } finally {
+        qrCheckinBusy = false;
+        startButton.disabled = false;
+    }
+}
+
+async function startQRScanner() {
+    if (scannerRunning || qrCheckinBusy) return;
+
+    try {
+        if (!window.Html5Qrcode) {
+            throw new Error('QR scanner library could not be loaded. Refresh the page and try again.');
+        }
+
+        const startButton = $('startScannerButton');
+        const stopButton = $('stopScannerButton');
+        startButton.disabled = true;
+        setScannerMessage('Starting camera...');
+
+        qrScanner = new Html5Qrcode('qrReader');
+        await qrScanner.start(
+            { facingMode: 'environment' },
+            {
+                fps: 10,
+                qrbox: { width: 250, height: 250 }
+            },
+            async decodedText => {
+                if (qrCheckinBusy) return;
+                await stopQRScanner();
+                await verifyScannedTicket(decodedText);
+            },
+            () => {
+                // Ignore individual frames where no QR code is detected.
+            }
+        );
+
+        scannerRunning = true;
+        stopButton.disabled = false;
+        setScannerMessage("Camera ready. Point it at a seeker's QR ticket.", 'success');
+    } catch (error) {
+        console.error('Volunteer QR scanner error:', error);
+        setScannerMessage(
+            error.message || 'Could not start the camera. Allow camera access and use the secure website (HTTPS).',
+            'error'
+        );
+        if (qrScanner) {
+            try { await qrScanner.clear(); } catch {}
+            qrScanner = null;
+        }
+        scannerRunning = false;
+        $('startScannerButton').disabled = false;
+        $('stopScannerButton').disabled = true;
+    }
+}
+
+async function stopQRScanner() {
+    const startButton = $('startScannerButton');
+    const stopButton = $('stopScannerButton');
+
+    if (!qrScanner) {
+        scannerRunning = false;
+        startButton.disabled = false;
+        stopButton.disabled = true;
+        return;
+    }
+
+    try {
+        if (scannerRunning) await qrScanner.stop();
+        await qrScanner.clear();
+    } catch (error) {
+        console.error('Volunteer QR scanner stop error:', error);
+    } finally {
+        qrScanner = null;
+        scannerRunning = false;
+        startButton.disabled = false;
+        stopButton.disabled = true;
+    }
+}
+
 async function loadParticipants() {
     $('directoryMessage').textContent = 'Loading records...';
     try {
@@ -161,6 +276,15 @@ async function loadParticipants() {
         participantRows.innerHTML = '<tr><td colspan="5" class="empty">Could not load records.</td></tr>';
     }
 }
+
+$('startScannerButton').addEventListener('click', startQRScanner);
+$('stopScannerButton').addEventListener('click', stopQRScanner);
+
+window.addEventListener('pagehide', () => {
+    if (qrScanner && scannerRunning) {
+        qrScanner.stop().catch(() => {});
+    }
+});
 
 checkinForm.addEventListener('submit', async (event) => {
     event.preventDefault();
