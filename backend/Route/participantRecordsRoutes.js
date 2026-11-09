@@ -19,10 +19,10 @@ router.get(
     participantRecordsController.getParticipants
 );
 
+// Admins and Volunteers can view the restricted checked-in list.
 router.get(
     '/checked-in',
     staffAuth,
-    adminOnly,
     participantRecordsController.getCheckedInParticipants
 );
 
