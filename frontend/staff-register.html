@@ -4,102 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Staff Registration | REGNUM DEI</title>
-
     <link rel="stylesheet" href="css/staff-login.css">
     <script defer src="js/staff-register.js"></script>
 </head>
-
 <body>
-
     <main class="login-container">
         <section class="login-card">
-
-            <div class="brand">
-                <h1>REGNUM DEI</h1>
-                <p>STAFF PORTAL</p>
-            </div>
-
+            <div class="brand"><h1>REGNUM DEI</h1><p>STAFF PORTAL</p></div>
             <div class="divider"></div>
-
             <h2>Join the Team</h2>
-            <p class="subtitle" id="invitationMessage">
-                Verifying your invitation...
-            </p>
-
+            <p class="subtitle" id="invitationMessage">Verifying your invitation...</p>
             <form id="registerForm" hidden>
-
-                <div class="form-group">
-                    <label for="fullName">Full Name</label>
-                    <input type="text" id="fullName" required>
+                <div class="form-group"><label for="fullName">Full Name</label><input type="text" id="fullName" required></div>
+                <div class="form-group"><label for="email">Email Address</label><input type="email" id="email" required></div>
+                <div class="form-group"><button type="button" id="verifyEmailButton">Send Verification Code</button></div>
+                <div class="form-group" id="otpVerificationGroup" hidden>
+                    <label for="emailOtp">Email Verification Code</label>
+                    <input type="text" id="emailOtp" inputmode="numeric" maxlength="6" pattern="[0-9]{6}" placeholder="Enter 6-digit code">
+                    <button type="button" id="confirmEmailButton">Confirm Code</button>
                 </div>
-
+                <p id="emailVerificationMessage" class="subtitle"></p>
                 <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" required>
+                    <label for="department">Department</label>
+                    <select id="department" required>
+                        <option value="">Select your department</option>
+                        <option value="Registration & Check-in">Registration & Check-in</option>
+                        <option value="Medical & Welfare">Medical & Welfare</option>
+                        <option value="Logistics & Operations">Logistics & Operations</option>
+                        <option value="Game Operations & Experience">Game Operations & Experience</option>
+                        <option value="Media & Publicity">Media & Publicity</option>
+                        <option value="Protocol & Hospitality">Protocol & Hospitality</option>
+                        <option value="Technical Support">Technical Support</option>
+                        <option value="Counseling & Follow-ups">Counseling & Follow-ups</option>
+                    </select>
                 </div>
-
-                <div class="form-group">
-    <button type="button" id="verifyEmailButton">
-        Send Verification Code
-    </button>
-</div>
-
-<div class="form-group" id="otpVerificationGroup" hidden>
-    <label for="emailOtp">Email Verification Code</label>
-    <input
-        type="text"
-        id="emailOtp"
-        inputmode="numeric"
-        maxlength="6"
-        pattern="[0-9]{6}"
-        placeholder="Enter 6-digit code"
-    >
-    <button type="button" id="confirmEmailButton">
-        Confirm Code
-    </button>
-</div>
-
-<p id="emailVerificationMessage" class="subtitle"></p>
-
-              <div class="form-group">
-    <label for="department">Department</label>
-    <select id="department" required>
-        <option value="">Select your department</option>
-        <option value="Registration & Check-in">Registration & Check-in</option>
-        <option value="Medical & Welfare">Medical & Welfare</option>
-        <option value="Logistics & Operations">Logistics & Operations</option>
-        <option value="Game Operations & Experience">Game Operations & Experience</option>
-        <option value="Media & Publicity">Media & Publicity</option>
-        <option value="Protocol & Hospitality">Protocol & Hospitality</option>
-        <option value="Technical Support">Technical Support</option>
-        <option value="Counseling & Follow-ups">Counseling & Follow-ups</option>
-    </select>
-</div>
-
-                <div class="form-group">
-                    <label for="password">Create Password</label>
-                    <input type="password" id="password" minlength="10" required>
-                </div>
-
+                <div class="form-group"><label for="password">Create Password</label><input type="password" id="password" minlength="10" required></div>
                 <p id="errorMessage" class="error-message"></p>
-
-                <button type="submit" id="registerButton">
-                    Create Account
-                </button>
-
+                <button type="submit" id="registerButton">Create Account</button>
             </form>
-
-            <p id="loginLink" hidden>
-    Registration successful!
-    <a href="staff-login.html">Proceed to Staff Login</a>
-</p>
-
-            <p class="footer-text">
-                Authorised invitation required.
-            </p>
-
+            <p id="loginLink" hidden>Registration successful! <a href="staff-login.html">Proceed to Staff Login</a></p>
+            <p style="text-align:center; margin-top:20px;">Already registered? <a href="staff-login.html" style="color:#d6b45b;">Log in here</a></p>
+            <p class="footer-text">Authorised invitation required.</p>
         </section>
     </main>
-
 </body>
 </html>
