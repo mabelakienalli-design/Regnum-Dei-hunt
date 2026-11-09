@@ -53,6 +53,19 @@
             <div class="pagination"><span id="pageInfo">Page 1</span><div><button id="previousPage" class="outline-button" type="button" disabled>Previous</button><button id="nextPage" class="outline-button" type="button" disabled>Next</button></div></div>
             <p id="directoryMessage" class="message" role="status"></p>
         </section>
+        <section class="panel">
+            <div class="panel-heading list-heading">
+                <div><p class="eyebrow">ENTRY RECORD</p><h2>Checked-In Seekers</h2><p>Seekers whose tickets have successfully been checked in.</p></div>
+                <button id="refreshCheckedInButton" class="outline-button" type="button">Refresh List</button>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>Seeker ID</th><th>Full Name</th><th>T-shirt</th><th>Payment</th><th>Check-in Time</th></tr></thead>
+                    <tbody id="checkedInRows"><tr><td colspan="5" class="empty">Loading checked-in seekers...</td></tr></tbody>
+                </table>
+            </div>
+            <p id="checkedInMessage" class="message" role="status" aria-live="polite"></p>
+        </section>
     </main>
 </body>
 </html>
